@@ -88,6 +88,7 @@ ramips_setup_interfaces()
 	kn_rc|\
 	mac1200rv2|\
 	miwifi-mini|\
+	miwifi-r3|\
 	miwifi-nano|\
 	mt7621|\
 	mt7628|\
@@ -431,7 +432,8 @@ ramips_setup_macs()
 	mir3g)
 		lan_mac=$(mtd_get_mac_binary Factory e006)
 		;;
-	miwifi-mini)
+	miwifi-mini|\
+	miwifi-r3)
 		wan_mac=$(cat /sys/class/net/eth0/address)
 		lan_mac=$(macaddr_setbit_la "$wan_mac")
 		;;

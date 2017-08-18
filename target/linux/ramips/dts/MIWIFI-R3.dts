@@ -17,53 +17,8 @@
 	chosen {
 		bootargs = "console=ttyS0,115200";
 	};
-
-	gpio-leds {
-		compatible = "gpio-leds";
-
-		blue {
-			label = "miwifi-r3:blue:status";
-			gpios = <&gpio1 0 GPIO_ACTIVE_LOW>;
-		};
-
-		yellow {
-			label = "miwifi-r3:yellow:status";
-			gpios = <&gpio1 2 GPIO_ACTIVE_LOW>;
-		};
-
-		red {
-			label = "miwifi-r3:red:status";
-			gpios = <&gpio1 5 GPIO_ACTIVE_LOW>;
-		};
-	};
-
-	gpio-keys-polled {
-		compatible = "gpio-keys-polled";
-		#address-cells = <1>;
-		#size-cells = <0>;
-		poll-interval = <20>;
-
-		reset {
-			label = "reset";
-			gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
-			linux,code = <KEY_RESTART>;
-		};
-	};
-};
-
-&gpio0 {
-	status = "okay";
-};
-
-&gpio1 {
-	status = "okay";
-};
-
-&gpio2 {
-	status = "okay";
-};
-
-nand {
+	
+	nand {
 	status = "okay";
 	compatible = "mtk,mt7620-nand";
 
@@ -137,6 +92,51 @@ nand {
 		label = "ubi";
 		reg = <0xa00000 0x7600000>;
 	};
+};
+
+	gpio-leds {
+		compatible = "gpio-leds";
+
+		blue {
+			label = "miwifi-r3:blue:status";
+			gpios = <&gpio1 0 GPIO_ACTIVE_LOW>;
+		};
+
+		yellow {
+			label = "miwifi-r3:yellow:status";
+			gpios = <&gpio1 2 GPIO_ACTIVE_LOW>;
+		};
+
+		red {
+			label = "miwifi-r3:red:status";
+			gpios = <&gpio1 5 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	gpio-keys-polled {
+		compatible = "gpio-keys-polled";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		poll-interval = <20>;
+
+		reset {
+			label = "reset";
+			gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+			linux,code = <KEY_RESTART>;
+		};
+	};
+};
+
+&gpio0 {
+	status = "okay";
+};
+
+&gpio1 {
+	status = "okay";
+};
+
+&gpio2 {
+	status = "okay";
 };
 
 &ehci {

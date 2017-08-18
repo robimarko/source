@@ -63,7 +63,7 @@
 	status = "okay";
 };
 
-&nand {
+nand {
 	status = "okay";
 	compatible = "mtk,mt7620-nand";
 

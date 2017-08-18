@@ -256,7 +256,8 @@ mir3g)
 	ucidef_set_led_netdev "eth" "Ethernet" "$board:red:wan" "eth0"
 	set_usb_led "$board:blue:usb"
 	;;
-miwifi-mini)
+miwifi-mini|\
+miwifi-r3)
 	ucidef_set_led_default "power" "power" "$board:red:status" "1"
 	;;
 mlw221|\

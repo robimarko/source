@@ -269,7 +269,7 @@ endef
 TARGET_DEVICES += miwifi-mini
 
 define Device/miwifi-r3
-  DTS := MIR3G
+  DTS := MIWIFI-R3
   BLOCKSIZE := 128k
   PAGESIZE := 2048
   KERNEL_SIZE := 4096k

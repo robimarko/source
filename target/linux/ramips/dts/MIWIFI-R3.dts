@@ -11,7 +11,7 @@
 
 	memory@0 {
 		device_type = "memory";
-		reg = <0x0 0x08000000>;
+		reg = <0x0 0x8000000>;
 	};
 
 	chosen {
@@ -74,40 +74,40 @@
 
 	partition@40000 {
 		label = "Config";
-		reg = <0x40000 0x80000>;
+		reg = <0x40000 0x40000>;
 		read-only;
 	};
 
 	partition@80000 {
 		label = "Bdata";
-		reg = <0x80000 0x0c0000>;
+		reg = <0x80000 0x40000>;
 		read-only;
 	};
 
-	factory: partition@0c0000 {
+	factory: partition@0xc0000 {
 		label = "Factory";
-		reg = <0x0c0000 0x100000>;
+		reg = <0xc0000 0x40000>;
 		read-only;
 	};
 
 	partition@100000 {
 		label = "crash";
-		reg = <0x100000 0x140000>;
+		reg = <0x100000 0x40000>;
 		read-only;
 	};
 
 	partition@140000 {
 		label = "crash_syslog";
-		reg = <0x140000 0x180000>;
+		reg = <0x140000 0x40000>;
 		read-only;
 	};
 
 	partition@180000 {
 		label = "reserved0";
-		reg = <0x180000 0x200000>;
+		reg = <0x180000 0x80000>;
 		read-only;
 	};
-//Stopped here
+
 	/* 
 	 * kernel0 partition should be erased, so 
 	 * u-boot in failsafe routine switches 
@@ -134,7 +134,7 @@
 	 */
 	partition@a00000 {
 		label = "ubi";
-		reg = <0xa00000 0x7580000>;
+		reg = <0xa00000 0x7600000>;
 	};
 };
 

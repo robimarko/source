@@ -64,6 +64,17 @@
 	};
 };
 
+nand: nand@1e003000 {
+		status = "disabled";
+
+		compatible = "mtk,mt7620a-nand";
+		bank-width = <2>;
+		reg = <0x1e003000 0x800
+			0x1e003800 0x800>;
+		#address-cells = <1>;
+		#size-cells = <1>;
+	};
+
 &pinctrl {
 	state_default: pinctrl0 {
 		gpio {

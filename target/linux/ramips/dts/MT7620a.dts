@@ -64,30 +64,6 @@
 	};
 };
 
-&nand {
-	status = "okay";
-
-	partition@0 {
-		label = "uboot";
-		reg = <0x00000 0x80000>; /* 64 KB */
-	};
-
-	partition@80000 {
-		label = "uboot_env";
-		reg = <0x80000 0x80000>; /* 64 KB */
-	};
-
-	partition@100000 {
-		label = "factory";
-		reg = <0x100000 0x40000>;
-	};
-
-	partition@140000 {
-		label = "rootfs";
-		reg = <0x140000 0xec0000>;
-	};
-};
-
 &pinctrl {
 	state_default: pinctrl0 {
 		gpio {

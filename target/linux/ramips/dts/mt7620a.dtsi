@@ -421,17 +421,6 @@
 		clocks = <&clkctrl 22 &clkctrl 25>;
 		clock-names = "host", "device";
 	};
-	
-	nand: nand@1e003000 {
-		status = "disabled";
-
-		compatible = "mtk,mt7621-nand";
-		bank-width = <2>;
-		reg = <0x1e003000 0x800
-			0x1e003800 0x800>;
-		#address-cells = <1>;
-		#size-cells = <1>;
-	};
 
 	ethernet: ethernet@10100000 {
 		compatible = "mediatek,mt7620-eth";

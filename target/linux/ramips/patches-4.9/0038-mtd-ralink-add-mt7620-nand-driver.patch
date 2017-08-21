@@ -64,7 +64,7 @@ Signed-off-by: John Crispin <blogic@openwrt.org>
 +#define BLOCK_ALIGNED(a) ((a) & (CFG_BLOCKSIZE - 1))
 +
 +#define READ_STATUS_RETRY	1000
-+
++#define RA_CHIP_OOB_AVAIL (4+8)
 +struct mtd_info *ranfc_mtd = NULL;
 +
 +int skipbbt = 0;

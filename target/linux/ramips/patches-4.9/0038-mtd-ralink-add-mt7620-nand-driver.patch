@@ -1449,7 +1449,7 @@ Signed-off-by: John Crispin <blogic@openwrt.org>
 +		break;
 +
 +	case MTD_OPS_AUTO_OOB:
-+		if (ooboffs > ra->oob->oobavail)
++		if (ooboffs > RA_CHIP_OOB_AVAIL)
 +			return -1;
 +
 +		while (size) {
@@ -1504,10 +1504,10 @@ Signed-off-by: John Crispin <blogic@openwrt.org>
 +		struct nand_oobfree *free;
 +		uint32_t woffs = ooboffs;
 +
-+		if (ooboffs > ra->oob->oobavail) 
++		if (ooboffs > RA_CHIP_OOB_AVAIL) 
 +			return -1;
 +		
-+		size = min(size, ra->oob->oobavail - ooboffs);
++		size = min(size, RA_CHIP_OOB_AVAIL - ooboffs);
 +		for(free = ra->oob->oobfree; free->length && size; free++) {
 +			int wlen = free->length - woffs;
 +			int bytes = 0;
@@ -1572,7 +1572,7 @@ Signed-off-by: John Crispin <blogic@openwrt.org>
 +	
 +	// oob sequential (burst) write
 +	if (datalen == 0 && ooblen) {
-+		int len = ((ooblen + ops->ooboffs) + (ra->oob->oobavail - 1)) / ra->oob->oobavail * oobsize;
++		int len = ((ooblen + ops->ooboffs) + (RA_CHIP_OOB_AVAIL - 1)) / RA_CHIP_OOB_AVAIL * oobsize;
 +
 +		/* select chip, and check if it is write protected */
 +		if (nfc_enable_chip(ra, addr, 0))

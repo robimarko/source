@@ -2380,7 +2380,7 @@ Signed-off-by: John Crispin <blogic@openwrt.org>
 +	struct mutex hwcontrol;
 +	struct mutex *controller;
 +#endif
-+	struct ranfc_mtd->oobavail	*oob;
++	struct nand_ecclayout	*oob;
 +	int 	state;
 +	unsigned int 	buffers_page;
 +	char	*buffers; //[CFG_PAGESIZE + CFG_PAGE_OOBSIZE];

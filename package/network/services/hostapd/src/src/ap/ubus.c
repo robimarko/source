@@ -137,6 +137,58 @@ hostapd_bss_ban_client(struct hostapd_data *hapd, u8 *addr, int time)
 	eloop_register_timeout(0, time * 1000, hostapd_bss_del_ban, ban, hapd);
 }
 
+static void
+hostapd_bss_signal_check(void *eloop_data, void *user_ctx)
+/* This is called by an eloop timeout.  All stations in the list are checked
+ * for signal level.  This requires calling the driver, since hostapd doesn't
+ * see packets from a station once it is fully authorized.
+ * Stations with signal level below the threshold will be dropped.
+ * Cases where the last RSSI is significantly less than the average are usually
+ * a bad reading and should not lead to a drop.
+ */
+ {   struct hostapd_data *hapd = user_ctx;
+	 struct hostap_sta_driver_data data;
+	 struct sta_info *sta, *sta_next;
+	 u8 addr[ETH_ALEN];  // Buffer the address for logging purposes, in case it is destroyed while dropping
+	 int strikes;        //    same with strike count on this station.
+	 int num_sta = 0;
+	 int num_drop = 0;
+	 int signal_inst;
+	 int signal_avg;
+	
+	 
+	 for (sta = hapd->sta_list; sta; sta = sta_next) {
+		 sta_next = sta->next;
+		 memcpy(addr, sta->addr, ETH_ALEN);
+		 if (!hostapd_drv_read_sta_data(hapd, &data, addr)) { 
+			signal_inst = data.last_rssi;
+			signal_avg = data.last_ack_rssi;
+			num_sta++;
+			strikes = sta->sig_drop_strikes;
+			if (signal_inst > signal_avg) 
+				signal_avg = signal_inst;
+			if (signal_inst > (signal_avg - 5)) {  // ignore unusually low instantaneous signal.
+				if (signal_avg < hapd->conf->signal_stay_min) { // signal bad.
+					strikes = ++sta->sig_drop_strikes;
+				    if (strikes >= hapd->conf->signal_strikes) {  // Struck out--, drop.
+						ap_sta_deauthenticate(hapd, sta, hapd->conf->signal_drop_reason); 
+						num_drop++;
+					}
+				}
+				else {
+					sta->sig_drop_strikes = 0;  // signal OK, reset the strike counter.
+					strikes = 0;
+					}				
+			}
+			hostapd_logger(hapd, addr, HOSTAPD_MODULE_IAPP, HOSTAPD_LEVEL_DEBUG, "%i %i (%i)",
+		        data.last_rssi, data.last_ack_rssi, strikes);
+		 }
+	 }
+	 hostapd_logger(hapd, NULL, HOSTAPD_MODULE_IAPP, HOSTAPD_LEVEL_INFO, "signal poll: %i STAs, %i dropped", num_sta, num_drop); 
+	 
+	 eloop_register_timeout(hapd->conf->signal_poll_time, 0, hostapd_bss_signal_check, eloop_data, hapd); 
+ }
+ 
 static int
 hostapd_bss_get_clients(struct ubus_context *ctx, struct ubus_object *obj,
 			struct ubus_request_data *req, const char *method,
@@ -174,6 +226,7 @@ hostapd_bss_get_clients(struct ubus_context *ctx, struct ubus_object *obj,
 			blobmsg_add_u8(&b, sta_flags[i].name,
 				       !!(sta->flags & sta_flags[i].flag));
 		blobmsg_add_u32(&b, "aid", sta->aid);
+
 		blobmsg_close_table(&b, c);
 	}
 	blobmsg_close_array(&b, list);
@@ -416,6 +469,73 @@ hostapd_vendor_elements(struct ubus_context *ctx, struct ubus_object *obj,
 	return UBUS_STATUS_OK;
 }
 
+enum {
+	SIGNAL_CONNECT,
+	SIGNAL_STAY,
+	SIGNAL_STRIKES,
+	SIGNAL_POLL,
+	SIGNAL_DROP_REASON,
+	__SIGNAL_SETTINGS_MAX
+};
+
+static const struct blobmsg_policy sig_policy[__SIGNAL_SETTINGS_MAX] = {
+	[SIGNAL_CONNECT] = {"connect", BLOBMSG_TYPE_INT32},
+	[SIGNAL_STAY] = {"stay", BLOBMSG_TYPE_INT32},
+	[SIGNAL_STRIKES] = {"strikes", BLOBMSG_TYPE_INT32},
+	[SIGNAL_POLL] = {"poll_time", BLOBMSG_TYPE_INT32},
+	[SIGNAL_DROP_REASON] = {"reason", BLOBMSG_TYPE_INT32}
+};
+
+static int
+hostapd_bss_set_signal(struct ubus_context *ctx, struct ubus_object *obj,
+			struct ubus_request_data *req, const char *method,
+			struct blob_attr *msg)
+{
+	struct blob_attr *tb[__SIGNAL_SETTINGS_MAX];
+	struct hostapd_data *hapd = get_hapd_from_object(obj);
+	int sig_stay;
+
+	blobmsg_parse(sig_policy, __SIGNAL_SETTINGS_MAX, tb, blob_data(msg), blob_len(msg));
+
+	if (!tb[SIGNAL_CONNECT])
+		return UBUS_STATUS_INVALID_ARGUMENT;
+	hapd->conf->signal_auth_min = blobmsg_get_u32(tb[SIGNAL_CONNECT]);
+	if (tb[SIGNAL_STAY]) { 
+	    sig_stay = blobmsg_get_u32(tb[SIGNAL_STAY]);
+
+	} 
+	else
+		sig_stay = hapd->conf->signal_auth_min - 5;  // Default is 5 dB lower to stay. 
+	hapd->conf->signal_stay_min = sig_stay;
+	if (tb[SIGNAL_STRIKES]) {
+		hapd->conf->signal_strikes = blobmsg_get_u32(tb[SIGNAL_STRIKES]);
+		if (hapd->conf->signal_strikes < 1)
+		    return UBUS_STATUS_INVALID_ARGUMENT;
+	}
+	else 
+		hapd->conf->signal_strikes = 3;
+	if (tb[SIGNAL_POLL]) {
+		hapd->conf->signal_poll_time = blobmsg_get_u32(tb[SIGNAL_POLL]);
+		if (hapd->conf->signal_poll_time < 3)
+		    return UBUS_STATUS_INVALID_ARGUMENT;
+    }
+    else
+        hapd->conf->signal_poll_time = 10;
+	if (tb[SIGNAL_DROP_REASON]) {
+		hapd->conf->signal_drop_reason = blobmsg_get_u32(tb[SIGNAL_DROP_REASON]);
+		if ((hapd->conf->signal_drop_reason < 1) || (hapd->conf->signal_drop_reason > 35)) // XXX -- look up real limit 
+		    return UBUS_STATUS_INVALID_ARGUMENT;
+    }
+    else
+        hapd->conf->signal_drop_reason = 3;  // Local choice. 5 (AP too busy) is also a good one.
+    		    	
+	eloop_cancel_timeout(hostapd_bss_signal_check, ELOOP_ALL_CTX, ELOOP_ALL_CTX);
+    eloop_register_timeout(3, 0, hostapd_bss_signal_check, NULL, hapd);  // Start up the poll timer.
+	
+	return UBUS_STATUS_OK;
+}
+
+
 static const struct ubus_method bss_methods[] = {
 	UBUS_METHOD_NOARG("get_clients", hostapd_bss_get_clients),
 	UBUS_METHOD("del_client", hostapd_bss_del_client, del_policy),
@@ -427,6 +547,7 @@ static const struct ubus_method bss_methods[] = {
 	UBUS_METHOD("switch_chan", hostapd_switch_chan, csa_policy),
 #endif
 	UBUS_METHOD("set_vendor_elements", hostapd_vendor_elements, ve_policy),
+	UBUS_METHOD("set_required_signal", hostapd_bss_set_signal, sig_policy),
 };
 
 static struct ubus_object_type bss_object_type =
@@ -456,6 +577,10 @@ void hostapd_ubus_add_bss(struct hostapd_data *hapd)
 	obj->n_methods = bss_object_type.n_methods;
 	ret = ubus_add_object(ctx, obj);
 	hostapd_ubus_ref_inc();
+	/* This should run after the config file has been read, I hope. */
+	if (hapd->conf->signal_stay_min > -128)
+	   eloop_register_timeout(3, 0, hostapd_bss_signal_check, NULL, hapd);  // Start up the poll timer.
+ 
 }
 
 void hostapd_ubus_free_bss(struct hostapd_data *hapd)
@@ -504,16 +629,26 @@ int hostapd_ubus_handle_event(struct hostapd_data *hapd, struct hostapd_ubus_req
 		addr = req->mgmt_frame->sa;
 	else
 		addr = req->addr;
-
+		
+	if (req->type < ARRAY_SIZE(types))
+		type = types[req->type];
+		
+    if (req->frame_info && req->type != HOSTAPD_UBUS_PROBE_REQ)  // don't clutter the log with probes.
+        hostapd_logger(hapd, addr, HOSTAPD_MODULE_MLME, HOSTAPD_LEVEL_INFO, "%s request, signal %i %s", 
+                type, req->frame_info->ssi_signal,
+                (req->frame_info->ssi_signal >= hapd->conf->signal_auth_min) ? "(Accepted)" : "(DENIED)");
+// reject weak signals.   
+    if (req->frame_info && req->frame_info->ssi_signal < hapd->conf->signal_auth_min) 
+        return -2;   
+    
+// reject banned MACs.    
 	ban = avl_find_element(&hapd->ubus.banned, addr, ban, avl);
-	if (ban)
-		return -2;
+	if (ban)         
+		return -2;  
 
 	if (!hapd->ubus.obj.has_subscribers)
 		return 0;
 
-	if (req->type < ARRAY_SIZE(types))
-		type = types[req->type];
 
 	blob_buf_init(&b, 0);
 	blobmsg_add_macaddr(&b, "address", addr);

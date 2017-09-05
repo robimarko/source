@@ -71,13 +71,5 @@ Signed-off-by: Jouni Malinen <jouni@qca.qualcomm.com>
  		if (wds && !(sta->flags & WLAN_STA_WDS)) {
  			int ret;
  			char ifname_wds[IFNAMSIZ + 1];
---- a/src/ap/sta_info.h
-+++ b/src/ap/sta_info.h
-@@ -115,6 +115,7 @@ struct sta_info {
- 	unsigned int radius_das_match:1;
- 	unsigned int ecsa_supported:1;
- 	unsigned int added_unassoc:1;
-+	unsigned int pending_wds_enable:1;
- 
- 	u16 auth_alg;
+
  

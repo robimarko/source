@@ -34,9 +34,9 @@ struct hostapd_ubus_iface {
 	struct ubus_object obj;
 };
 
-struct hostapd_ubus_bss {
+struct hostapd_ubus_bss { /* per-BSS parameters */
 	struct ubus_object obj;
-	struct avl_tree banned;
+	struct avl_tree banned; /* List of banned MACs */
 };
 
 void hostapd_ubus_add_iface(struct hostapd_iface *iface);
@@ -73,6 +73,6 @@ static inline int hostapd_ubus_handle_event(struct hostapd_data *hapd, struct ho
 	return 0;
 }
 
-#endif
+#endif /* UBUS_SUPPORT */
 
 #endif

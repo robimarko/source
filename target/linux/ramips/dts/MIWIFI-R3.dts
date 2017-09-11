@@ -64,15 +64,8 @@
 		read-only;
 	};
 
-	/* 
-	 * kernel0 partition should be erased, so 
-	 * u-boot in failsafe routine switches 
-	 * to next one looking for kernel image.
-	 * To remind about this fact rename kernel0
-	 * into kernel_erase.
-	 */
 	partition@200000 {
-		label = "kernel_erase";
+		label = "kernel0_rsvd";
 		reg = <0x200000 0x400000>;
 	};
 

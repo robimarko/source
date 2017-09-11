@@ -282,7 +282,7 @@ define Device/miwifi-r3
   IMAGE/sysupgrade.tar := sysupgrade-tar | append-metadata
   DEVICE_TITLE := Xiaomi Mi Router R3
   SUPPORTED_DEVICES += miwifi-r3
-  DEVICE_PACKAGES := kmod-usb2 kmod-usb-ohci
+  DEVICE_PACKAGES := kmod-usb2 kmod-usb-ohci uboot-envtools
 endef
 TARGET_DEVICES += miwifi-r3
 

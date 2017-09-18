@@ -7,6 +7,7 @@
  *  - MikroTik RouterBOARD 952Ui-5ac2nD
  *  - MikroTik RouterBOARD 962UiGS-5HacT2HnT
  *  - MikroTik RouterBOARD 750UP r2
+ *  - MikroTik RouterBOARD 750P-PBr2
  *  - MikroTik RouterBOARD 750 r2
  *  - MikroTik RouterBOARD LHG 5nD
  *
@@ -780,6 +781,21 @@ static void __init rb750upr2_setup(void)
 }
 
 /*
+ * Init the Powerbox hardware (QCA953x).
+ * The 750P-PBr2 (Powerbox) is nearly identical to the hEX PoE lite, only without
+ * USB. It shares the same bootloader board identifier.
+ */
+static void __init rb750p_pbr2_setup(void)
+{
+	u32 flags = RBSPI_HAS_WAN4 | RBSPI_HAS_SSR | RBSPI_HAS_POE;
+
+	if (rbspi_platform_setup())
+		return;
+
+	rbspi_952_750r2_setup(flags);
+}
+
+/*
  * Init the hAP ac / 962UiGS-5HacT2HnT hardware (QCA9558).
  * The hAP ac has 5 ethernet ports provided by an AR8337 switch. Port 1 is
  * assigned to WAN, ports 2-5 are assigned to LAN. Port 0 is connected to the
@@ -939,6 +955,7 @@ MIPS_MACHINE_NONAME(ATH79_MACH_RB_941, "H951L", rbhapl_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_952, "952-hb", rb952_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_962, "962", rb962_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_750UPR2, "750-hb", rb750upr2_setup);
+MIPS_MACHINE_NONAME(ATH79_MACH_RB_750PPBR2, "750-hb", rb750p_pbr2_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_LHG5, "lhg", rblhg_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_WAP, "wap-hb", rbwap_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_CAP, "cap-hb", rbcap_setup);

@@ -764,7 +764,8 @@ static void __init rb952_setup(void)
  * Init the hEX (PoE) lite hardware (QCA953x).
  * The 750UP r2 (hEX PoE lite) is nearly identical to the hAP, only without
  * WLAN. The 750 r2 (hEX lite) is nearly identical to the 750UP r2, only
- * without USB and POE. It shares the same bootloader board identifier.
+ * without USB and POE. The 750P Pbr2 (Powerbox) is nearly identical to hEX PoE
+ * lite, only without USB. It shares the same bootloader board identifier.
  */
 static void __init rb750upr2_setup(void)
 {
@@ -776,21 +777,10 @@ static void __init rb750upr2_setup(void)
 	/* differentiate the hEX lite from the hEX PoE lite */
 	if (strstr(mips_get_machine_name(), "750UP r2"))
 		flags |= RBSPI_HAS_USB | RBSPI_HAS_POE;
-
-	rbspi_952_750r2_setup(flags);
-}
-
-/*
- * Init the Powerbox hardware (QCA953x).
- * The 750P-PBr2 (Powerbox) is nearly identical to the hEX PoE lite, only without
- * USB. It shares the same bootloader board identifier.
- */
-static void __init rb750p_pbr2_setup(void)
-{
-	u32 flags = RBSPI_HAS_WAN4 | RBSPI_HAS_SSR | RBSPI_HAS_POE;
-
-	if (rbspi_platform_setup())
-		return;
+	
+	/* differentiate the Powerbox from the hEX lite */
+	if (strstr(mips_get_machine_name(), "750P r2"))
+		flags |= RBSPI_HAS_POE;
 
 	rbspi_952_750r2_setup(flags);
 }
@@ -955,7 +945,6 @@ MIPS_MACHINE_NONAME(ATH79_MACH_RB_941, "H951L", rbhapl_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_952, "952-hb", rb952_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_962, "962", rb962_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_750UPR2, "750-hb", rb750upr2_setup);
-MIPS_MACHINE_NONAME(ATH79_MACH_RB_750PPBR2, "750-hb", rb750p_pbr2_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_LHG5, "lhg", rblhg_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_WAP, "wap-hb", rbwap_setup);
 MIPS_MACHINE_NONAME(ATH79_MACH_RB_CAP, "cap-hb", rbcap_setup);

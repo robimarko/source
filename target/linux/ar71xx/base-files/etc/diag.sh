@@ -169,7 +169,7 @@ get_status_led() {
 		status_led="devolo:status:wlan"
 		;;
 	dlb-5)
-		status_led="ligodlb:green:system"
+		status_led="ligodlb:green:power"
 		;;
 	dr531)
 		status_led="$board:green:sig4"

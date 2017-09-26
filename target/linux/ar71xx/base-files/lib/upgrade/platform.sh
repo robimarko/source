@@ -357,6 +357,7 @@ platform_check_image() {
 	pb44|\
 	routerstation-pro|\
 	routerstation|\
+	deliberant|\
 	wp543|\
 	wpe72)
 		[ "$magic" != "4349" ] && {

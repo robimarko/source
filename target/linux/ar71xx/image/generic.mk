@@ -74,6 +74,13 @@ define Build/wrgg-pad-rootfs
 	$(STAGING_DIR_HOST)/bin/padjffs2 $(IMAGE_ROOTFS) -c 64 >>$@
 endef
 
+define Build/v2v-uImage
+	mkimage -A $(LINUX_KARCH) \
+		-O linux -T kernel \
+		-C $(1) -a $(KERNEL_LOADADDR) -e $(if $(KERNEL_ENTRY),$(KERNEL_ENTRY),$(KERNEL_LOADADDR)) \
+		-n 'APCPE.QM-1.v7.99.0000' -d $@ $@.new
+	@mv $@.new $@
+endef
 
 define Device/ap121f
   DEVICE_TITLE := ALFA Network AP121F
@@ -223,12 +230,10 @@ define Device/dlb-5
   BOARDNAME := DLB-5
   DEVICE_PACKAGES := rssileds
   DEVICE_TITLE := LigoDLB Propeller 5
-  MTDPARTS := spi0.0:192k(u-boot)ro,64k(u-boot-env),1152k(kernel1),6528k(rootfs1),1152k(kernel2),6528k(rootfs2),576k(data)ro,128k(cfg)ro,64k(art)ro,7680k@0x40000(firmware1),7680k@0x7C0000(firmware2)
+  MTDPARTS := spi0.0:192k(u-boot)ro,64k(u-boot-env),1152k(kernel1),6528k(rootfs1),1152k(kernel2),6528k(rootfs2),576k(data)ro,128k(cfg)ro,64k(art)ro,7680k@0x40000(firmware1),7680k@0x7C0000(firmware2),16384k@0x0(flash)
   IMAGE_SIZE := 7680k
-  ROOTFS_SIZE := 6528k
   IMAGES := sysupgrade.bin factory.img
-  IMAGE/factory.img := append-rootfs | pad-rootfs | pad-to $$$$(ROOTFS_SIZE) | append-kernel | check-size $$$$(IMAGE_SIZE)
-endef
+  KERNEL := kernel-bin | patch-cmdline | lzma | v2v-uImage lzmaendef
 TARGET_DEVICES += dlb-5
 
 define Device/dragino2

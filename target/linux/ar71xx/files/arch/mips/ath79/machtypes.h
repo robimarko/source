@@ -72,7 +72,7 @@ enum ath79_mach_type {
 	ATH79_MACH_CPE870,			/* YunCore CPE870 */
 	ATH79_MACH_CR3000,			/* PowerCloud CR3000 */
 	ATH79_MACH_CR5000,			/* PowerCloud CR5000 */
-	ATH79_MACH_DELIBERANT,			/* Deliberant */
+	ATH79_MACH_LIGODLB_5,			/* LigoDLB Propeller 5 */
 	ATH79_MACH_DAP_2695_A1,			/* D-Link DAP-2695 rev. A1 */
 	ATH79_MACH_DB120,			/* Atheros DB120 reference board */
 	ATH79_MACH_DGL_5500_A1,			/* D-link DGL-5500 rev. A1 */

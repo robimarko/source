@@ -545,8 +545,8 @@ ar71xx_board_detect() {
 	*"CR5000")
 		name="cr5000"
 		;;
-	*"Deliberant")
-		name="deliberant"
+	*"LigoDLB Propeller 5")
+		name="dlb-5"
 		;;
 	*"DAP-2695 rev. A1")
 		name="dap-2695-a1"

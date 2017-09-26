@@ -129,7 +129,7 @@ ar71xx_setup_interfaces()
 	tube2h|\
 	unifiac-lite|\
 	wndap360|\
-	deliberant|\
+	dlb-5|\
 	wp543)
 		ucidef_set_interface_lan "eth0"
 		;;

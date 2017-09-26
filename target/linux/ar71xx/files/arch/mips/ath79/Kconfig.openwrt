@@ -490,15 +490,14 @@ config ATH79_MACH_XD3200
 	select ATH79_DEV_M25P80
 	select ATH79_DEV_WMAC
 
-config ATH79_MACH_DELIBERANT
-	bool "Deliberant support"
+config ATH79_MACH_LIGODLB_5
+	bool "LigoDLB Propeller 5 support"
 	select SOC_AR934X
 	select ATH79_DEV_AP9X_PCI if PCI
 	select ATH79_DEV_ETH
 	select ATH79_DEV_GPIO_BUTTONS
 	select ATH79_DEV_LEDS_GPIO
 	select ATH79_DEV_M25P80
-	select ATH79_DEV_USB
 	select ATH79_DEV_WMAC
 
 config ATH79_MACH_DGL_5500_A1

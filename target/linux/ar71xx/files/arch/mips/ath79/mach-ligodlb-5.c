@@ -1,9 +1,9 @@
 /*
- *  DELIBERANT board support
+ *  LigoWawe(Deliberant) LigoDLB Propeller 5 support
  *
  *  Copyright (C) 2010-2012 Gabor Juhos <juhosg@openwrt.org>
  *  Copyright (C) 2011-2012 Anan Huang <axishero@foxmail.com>
- *  Copyright (C) 2015 Jernej Kos <jernej@kos.mx>
+ *  Copyright (C) 2017 Robert Marko <robimarko@otvorenamreza.org>
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU General Public License version 2 as published
@@ -28,60 +28,60 @@
 #include "dev-wmac.h"
 #include "machtypes.h"
 
-#define DELIBERANT_GPIO_BTN_RESET	17
-#define DELIBERANT_GPIO_LED_LAN0	1
-#define DELIBERANT_GPIO_LED_L1		2
-#define DELIBERANT_GPIO_LED_L2		3
-#define DELIBERANT_GPIO_LED_L3		4
-#define DELIBERANT_GPIO_LED_L4		13
+#define LIGODLB_GPIO_BTN_RESET	17
+#define LIGODLB_GPIO_LED_LAN0	1
+#define LIGODLB_GPIO_LED_L1		2
+#define LIGODLB_GPIO_LED_L2		3
+#define LIGODLB_GPIO_LED_L3		4
+#define LIGODLB_GPIO_LED_L4		13
 
-#define DELIBERANT_GPIO_LED_PWR		0
+#define LIGODLB_GPIO_LED_PWR		0
 
-#define DELIBERANT_KEYS_POLL_INTERVAL		20	/* msecs */
-#define DELIBERANT_KEYS_DEBOUNCE_INTERVAL	(3 * DELIBERANT_KEYS_POLL_INTERVAL)
+#define LIGODLB_KEYS_POLL_INTERVAL	20	/* msecs */
+#define LIGODLB_KEYS_DEBOUNCE_INTERVAL	(3 * LIGODLB_KEYS_POLL_INTERVAL)
 
-#define DELIBERANT_PCIE_CALDATA_OFFSET	0x5000
+#define LIGODLB_PCIE_CALDATA_OFFSET	0x5000
 
-static struct gpio_led deliberant_leds_gpio[] __initdata = {
+static struct gpio_led ligdolb_leds_gpio[] __initdata = {
 	{
-		.name		= "deliberant:green:system",
-		.gpio		= DELIBERANT_GPIO_LED_PWR,
+		.name		= "ligodlb:green:system",
+		.gpio		= LIGODLB_GPIO_LED_PWR,
 		.active_low	= 1,
 	}, {
-		.name		= "deliberant:green:lan0",
-		.gpio		= DELIBERANT_GPIO_LED_LAN0,
+		.name		= "ligodlb:green:lan0",
+		.gpio		= LIGODLB_GPIO_LED_LAN0,
 		.active_low	= 1,
 	}, {
-		.name		= "deliberant:orange:link1",
-		.gpio		= DELIBERANT_GPIO_LED_L1,
+		.name		= "ligodlb:orange:link1",
+		.gpio		= LIGODLB_GPIO_LED_L1,
 		.active_low	= 1,
 	}, {
-		.name		= "deliberant:orange:link2",
-		.gpio		= DELIBERANT_GPIO_LED_L2,
+		.name		= "ligodlb:orange:link2",
+		.gpio		= LIGODLB_GPIO_LED_L2,
 		.active_low	= 1,
 	}, {
-		.name		= "deliberant:orange:link3",
-		.gpio		= DELIBERANT_GPIO_LED_L3,
+		.name		= "ligodlb:orange:link3",
+		.gpio		= LIGODLB_GPIO_LED_L3,
 		.active_low	= 1,
 	}, {
-		.name		= "deliberant:orange:link4",
-		.gpio		= DELIBERANT_GPIO_LED_L4,
+		.name		= "ligodlb:orange:link4",
+		.gpio		= LIGODLB_GPIO_LED_L4,
 		.active_low	= 1,
 	},
 };
 
-static struct gpio_keys_button deliberant_gpio_keys[] __initdata = {
+static struct gpio_keys_button ligdolb_gpio_keys[] __initdata = {
 	{
 		.desc		= "reset",
 		.type		= EV_KEY,
 		.code		= KEY_RESTART,
-		.debounce_interval = DELIBERANT_KEYS_DEBOUNCE_INTERVAL,
-		.gpio		= DELIBERANT_GPIO_BTN_RESET,
+		.debounce_interval = LIGODLB_KEYS_DEBOUNCE_INTERVAL,
+		.gpio		= LIGODLB_GPIO_BTN_RESET,
 		.active_low	= 1,
 	}
 };
 
-static void __init deliberant_setup(void)
+static void __init ligdolb_5_setup(void)
 {
 	u8 *wifi_mac = (u8 *) KSEG1ADDR(0x1fff1002);
 	u8 *eth_mac = (u8 *) KSEG1ADDR(0x1fff0000);
@@ -89,11 +89,11 @@ static void __init deliberant_setup(void)
 
 	ath79_register_m25p80(NULL);
 
-	ath79_register_leds_gpio(-1, ARRAY_SIZE(deliberant_leds_gpio),
-				 deliberant_leds_gpio);
-	ath79_register_gpio_keys_polled(-1, DELIBERANT_KEYS_POLL_INTERVAL,
-					 ARRAY_SIZE(deliberant_gpio_keys),
-					 deliberant_gpio_keys);
+	ath79_register_leds_gpio(-1, ARRAY_SIZE(ligdolb_leds_gpio),
+				 ligdolb_leds_gpio);
+	ath79_register_gpio_keys_polled(-1, LIGODLB_KEYS_POLL_INTERVAL,
+					 ARRAY_SIZE(ligdolb_gpio_keys),
+					 ligdolb_gpio_keys);
 	ath79_register_wmac(ee, wifi_mac);
 
 	ath79_setup_ar934x_eth_cfg(AR934X_ETH_CFG_MII_GMAC0 |
@@ -111,5 +111,5 @@ static void __init deliberant_setup(void)
 	ath79_register_eth(0);
 }
 
-MIPS_MACHINE(ATH79_MACH_DELIBERANT, "DELIBERANT",
-	     "Deliberant Generic", deliberant_setup);
+MIPS_MACHINE(ATH79_MACH_LIGODLB_5, "DLB-5",
+	     "LigoWawe DLB-5", ligdolb_5_setup);

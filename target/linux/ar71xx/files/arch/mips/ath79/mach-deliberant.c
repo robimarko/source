@@ -28,11 +28,14 @@
 #include "dev-wmac.h"
 #include "machtypes.h"
 
-#define DELIBERANT_GPIO_BTN_RESET	14
-#define DELIBERANT_GPIO_LED_WPS	13
-#define DELIBERANT_GPIO_LED_WLAN	11
+#define DELIBERANT_GPIO_BTN_RESET	17
+#define DELIBERANT_GPIO_LED_LAN0	1
+#define DELIBERANT_GPIO_LED_L1		2
+#define DELIBERANT_GPIO_LED_L2		3
+#define DELIBERANT_GPIO_LED_L3		4
+#define DELIBERANT_GPIO_LED_L4		13
 
-#define DELIBERANT_GPIO_LED_SYSTEM	12
+#define DELIBERANT_GPIO_LED_PWR		0
 
 #define DELIBERANT_KEYS_POLL_INTERVAL		20	/* msecs */
 #define DELIBERANT_KEYS_DEBOUNCE_INTERVAL	(3 * DELIBERANT_KEYS_POLL_INTERVAL)
@@ -42,17 +45,29 @@
 static struct gpio_led deliberant_leds_gpio[] __initdata = {
 	{
 		.name		= "deliberant:green:system",
-		.gpio		= DELIBERANT_GPIO_LED_SYSTEM,
+		.gpio		= DELIBERANT_GPIO_LED_PWR,
 		.active_low	= 1,
 	}, {
-		.name		= "deliberant:green:wps",
-		.gpio		= DELIBERANT_GPIO_LED_WPS,
+		.name		= "deliberant:green:lan0",
+		.gpio		= DELIBERANT_GPIO_LED_LAN0,
 		.active_low	= 1,
 	}, {
-		.name		= "deliberant:green:wlan",
-		.gpio		= DELIBERANT_GPIO_LED_WLAN,
+		.name		= "deliberant:orange:link1",
+		.gpio		= DELIBERANT_GPIO_LED_L1,
 		.active_low	= 1,
-	}
+	}, {
+		.name		= "deliberant:orange:link2",
+		.gpio		= DELIBERANT_GPIO_LED_L2,
+		.active_low	= 1,
+	}, {
+		.name		= "deliberant:orange:link3",
+		.gpio		= DELIBERANT_GPIO_LED_L3,
+		.active_low	= 1,
+	}, {
+		.name		= "deliberant:orange:link4",
+		.gpio		= DELIBERANT_GPIO_LED_L4,
+		.active_low	= 1,
+	},
 };
 
 static struct gpio_keys_button deliberant_gpio_keys[] __initdata = {

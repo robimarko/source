@@ -88,6 +88,11 @@ static void __init ligdolb_5_setup(void)
 	u8 *ee = (u8 *) KSEG1ADDR(0x1fff1000);
 
 	ath79_register_m25p80(NULL);
+	
+	/* Disable JTAG, enabling GPIOs 0-3 */
+	/* Configure OBS4 line, for GPIO 4*/
+	ath79_gpio_function_setup(AR934X_GPIO_FUNC_JTAG_DISABLE,
+				  AR934X_GPIO_FUNC_CLK_OBS4_EN);
 
 	ath79_register_leds_gpio(-1, ARRAY_SIZE(ligdolb_leds_gpio),
 				 ligdolb_leds_gpio);
@@ -96,16 +101,12 @@ static void __init ligdolb_5_setup(void)
 					 ligdolb_gpio_keys);
 	ath79_register_wmac(ee, wifi_mac);
 
-	ath79_setup_ar934x_eth_cfg(AR934X_ETH_CFG_MII_GMAC0 |
-				   AR934X_ETH_CFG_MII_GMAC0_SLAVE);
-
-	ath79_register_mdio(1, 0x0);
 	ath79_register_mdio(0, 0x0);
 
 	ath79_init_mac(ath79_eth0_data.mac_addr, eth_mac, 1);
 
-	/* GMAC0 is connected to an AR8327 switch */
-	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
+	/* LAN0 is connected to an MII interface */
+	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_MII;
 	ath79_eth0_data.phy_mask = BIT(0);
 	ath79_eth0_data.mii_bus_dev = &ath79_mdio0_device.dev;
 	ath79_register_eth(0);

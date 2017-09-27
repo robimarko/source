@@ -90,6 +90,10 @@ static void __init ligdolb_5_setup(void)
 	ath79_register_m25p80(NULL);
 	ath79_register_wmac(ee, wifi_mac);
 	
+	//Disable JTAG to enable use of GPIO 0-4
+	ath79_gpio_function_setup(AR934X_GPIO_FUNC_JTAG_DISABLE,
+				  AR934X_GPIO_FUNC_CLK_OBS4_EN);
+	
 	ath79_setup_ar934x_eth_cfg(AR934X_ETH_CFG_MII_GMAC0 |
 				   AR934X_ETH_CFG_MII_GMAC0_SLAVE);
 

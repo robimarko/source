@@ -40,8 +40,6 @@
 #define LIGODLB_KEYS_POLL_INTERVAL	20	/* msecs */
 #define LIGODLB_KEYS_DEBOUNCE_INTERVAL	(3 * LIGODLB_KEYS_POLL_INTERVAL)
 
-#define LIGODLB_PCIE_CALDATA_OFFSET	0x5000
-
 static struct gpio_led ligdolb_leds_gpio[] __initdata = {
 	{
 		.name		= "ligodlb:green:power",

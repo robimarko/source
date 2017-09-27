@@ -230,8 +230,9 @@ define Device/dlb-5
   BOARDNAME := DLB-5
   DEVICE_PACKAGES := rssileds
   DEVICE_TITLE := LigoDLB Propeller 5
-  MTDPARTS := spi0.0:192k(u-boot)ro,64k(u-boot-env),1152k(kernel1),6528k(rootfs1),1152k(kernel2),6528k(rootfs2),576k(data)ro,128k(cfg)ro,64k(art)ro,7680k@0x40000(firmware1),7680k@0x7C0000(firmware2)
-endef
+  MTDPARTS := spi0.0:192k(u-boot)ro,64k(u-boot-env),1152k(kernel1),6528k(rootfs1),1152k(kernel2),6528k(rootfs2),576k(data)ro,128k(cfg)ro,64k(art)ro,7680k@0x40000(firmware1),7680k@0x7C0000(firmware2),16384k@0x0(flash)
+  IMAGE_SIZE := 7680k
+  endef
 TARGET_DEVICES += dlb-5
 
 define Device/dragino2

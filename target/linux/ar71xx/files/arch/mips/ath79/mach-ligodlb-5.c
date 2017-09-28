@@ -44,6 +44,7 @@ static struct gpio_led ligdolb_leds_gpio[] __initdata = {
 	{
 		.name		= "ligodlb:green:power",
 		.gpio		= LIGODLB_GPIO_LED_PWR,
+		.default_state  = LEDS_GPIO_DEFSTATE_ON,
 		.active_low	= 1,
 	}, {
 		.name		= "ligodlb:green:lan0",

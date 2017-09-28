@@ -107,7 +107,7 @@ static void __init ligdolb_5_setup(void)
 	ath79_init_mac(ath79_eth0_data.mac_addr, eth_mac, 0);
 
 	/* GMAC0 is connected to an AR8032 PHY */
-	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
+	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_MII;
 	ath79_eth0_data.phy_mask = BIT(0);
 	ath79_eth0_data.mii_bus_dev = &ath79_mdio0_device.dev;
 	ath79_register_eth(0);

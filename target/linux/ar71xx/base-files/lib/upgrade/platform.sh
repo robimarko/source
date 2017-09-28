@@ -224,6 +224,7 @@ platform_check_image() {
 	cpe505n|\
 	cpe830|\
 	cpe870|\
+	dlb-5|\
 	dgl-5500-a1|\
 	dhp-1565-a1|\
 	dir-505-a1|\
@@ -357,7 +358,6 @@ platform_check_image() {
 	pb44|\
 	routerstation-pro|\
 	routerstation|\
-	dlb-5|\
 	wp543|\
 	wpe72)
 		[ "$magic" != "4349" ] && {

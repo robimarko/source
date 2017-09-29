@@ -115,4 +115,4 @@ static void __init ligdolb_5_setup(void)
 }
 
 MIPS_MACHINE(ATH79_MACH_LIGODLB_5, "DLB-5",
-	     "LigoWawe DLB-5", ligdolb_5_setup);
+	     "LigoDLB Propeller 5", ligdolb_5_setup);

@@ -74,7 +74,8 @@ define Build/wrgg-pad-rootfs
 	$(STAGING_DIR_HOST)/bin/padjffs2 $(IMAGE_ROOTFS) -c 64 >>$@
 endef
 
-define Build/v2v-uImage
+define Build/LigoWawe-uImage
+	# Stock firmware checks kernel name only
 	mkimage -A $(LINUX_KARCH) \
 		-O linux -T kernel \
 		-C $(1) -a $(KERNEL_LOADADDR) -e $(if $(KERNEL_ENTRY),$(KERNEL_ENTRY),$(KERNEL_LOADADDR)) \
@@ -232,6 +233,7 @@ define Device/dlb-5
   DEVICE_TITLE := LigoDLB Propeller 5
   MTDPARTS := spi0.0:192k(u-boot)ro,64k(u-boot-env),7680k(firmware),7680k(firmware-backup),576k(data)ro,128k(cfg)ro,64k(art)ro
   IMAGE_SIZE := 7680k
+  KERNEL := kernel-bin | patch-cmdline | lzma | LigoWawe-uImage lzma
   endef
 TARGET_DEVICES += dlb-5
 

@@ -10,6 +10,5 @@ start() {
 		# Clear linux fail counter for the active firmware image.
 		active_fw=$(fw_printenv -n active)
 		fw_setenv linux_fail${active_fw}=0
-		;;
 	fi
 }

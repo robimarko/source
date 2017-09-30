@@ -145,6 +145,9 @@ tplink_board_detect() {
 	hwver=" v${hwver#0}"
 
 	case "$hwid" in
+	"002102"*)
+		model="TP-Link CPE210-v2"
+		;;
 	"001001"*)
 		model="TP-Link TL-MR10U"
 		;;
@@ -1009,6 +1012,9 @@ ar71xx_board_detect() {
 		;;
 	*"TEW-823DRU")
 		name="tew-823dru"
+		;;
+	*"TL-CPE210-v2")
+		name="tl-cpe210-v2"
 		;;
 	*"TL-MR10U")
 		name="tl-mr10u"

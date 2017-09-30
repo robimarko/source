@@ -394,6 +394,7 @@ platform_check_image() {
 	smart-300|\
 	som9331|\
 	tellstick-znet-lite|\
+	tl-cpe210-v2|\
 	tl-mr10u|\
 	tl-mr11u|\
 	tl-mr12u|\

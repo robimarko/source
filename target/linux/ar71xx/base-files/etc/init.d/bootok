@@ -1,0 +1,15 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+
+start() {
+	. /lib/ar71xx.sh
+
+	local board=$(ar71xx_board_name)
+	if [ $board = "dlb-5" ]; then
+		# Clear linux fail counter for the active firmware image.
+		active_fw=$(fw_printenv -n active)
+		fw_setenv linux_fail${active_fw}
+		;;
+	fi
+}

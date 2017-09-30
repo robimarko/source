@@ -233,7 +233,7 @@ define Device/dlb-5
   DEVICE_TITLE := LigoDLB Propeller 5
   MTDPARTS := spi0.0:192k(u-boot)ro,64k(u-boot-env),7680k(firmware),7680k(firmware-backup),576k(data)ro,128k(cfg)ro,64k(art)ro
   IMAGE_SIZE := 7680k
-  KERNEL := kernel-bin | patch-cmdline | lzma | LigoWawe-uImage lzma
+  #KERNEL := kernel-bin | patch-cmdline | lzma | LigoWawe-uImage lzma
   endef
 TARGET_DEVICES += dlb-5
 

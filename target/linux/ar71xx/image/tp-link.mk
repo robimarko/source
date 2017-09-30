@@ -273,6 +273,15 @@ define Device/re450-v1
 endef
 TARGET_DEVICES += re450-v1
 
+define Device/tl-cpe210-v2
+  $(Device/tplink-8mlzma)
+  DEVICE_TITLE := TP-LINK CPE210 v2
+  BOARDNAME := CPE210-v2
+  DEVICE_PROFILE := CPE210v2
+  TPLINK_HWID := 0x00210200
+endef
+TARGET_DEVICES += tl-cpe210-v2
+
 define Device/tl-mr10u-v1
   $(Device/tplink-4mlzma)
   DEVICE_TITLE := TP-LINK TL-MR10U v1

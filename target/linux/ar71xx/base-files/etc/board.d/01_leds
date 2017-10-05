@@ -204,6 +204,7 @@ cf-e530n)
 	ucidef_set_led_netdev "wan" "WAN" "$board:blue:wan" "eth1"
 	;;
 cpe210|\
+cpe220-v2|\
 cpe510|\
 wbs210|\
 wbs510)

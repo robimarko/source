@@ -145,6 +145,19 @@ static void __init cpe210_setup(void)
 	ath79_register_wmac(ee, mac);
 }
 
+static void __init cpe220_v2_setup(void)
+{
+	u8 *mac = (u8 *) KSEG1ADDR(0x1f830008);
+	u8 *ee = (u8 *) KSEG1ADDR(0x1fff1000);
+
+	ath79_register_leds_gpio(-1, ARRAY_SIZE(cpe510_leds_gpio),
+				 cpe510_leds_gpio);
+
+	cpe_setup(mac);
+
+	ath79_register_wmac(ee, mac);
+}
+
 static void __init cpe510_setup(void)
 {
 	u8 *mac = (u8 *) KSEG1ADDR(0x1f830008);
@@ -173,6 +186,9 @@ static void __init wbs_setup(void)
 
 MIPS_MACHINE(ATH79_MACH_CPE210, "CPE210", "TP-LINK CPE210/220",
 	     cpe210_setup);
+
+MIPS_MACHINE(ATH79_MACH_CPE220_V2, "CPE220 v2", "TP-LINK CPE220 v2",
+	     cpe220_v2_setup);
 
 MIPS_MACHINE(ATH79_MACH_CPE510, "CPE510", "TP-LINK CPE510/520",
 	     cpe510_setup);

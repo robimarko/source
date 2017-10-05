@@ -254,6 +254,7 @@ ar71xx_setup_interfaces()
 		ucidef_set_interface_lan "eth0" "dhcp"
 		;;
 	cpe210|\
+	cpe220-v2|\
 	cpe510|\
 	wbs210|\
 	wbs510)

@@ -156,7 +156,7 @@ static struct device_info boards[] = {
 
 	/** Firmware layout for the CPE220 v2 */
 	{
-		.id	= "CPE220-v2",
+		.id	= "CPE220-V2",
 		.vendor	= "CPE220(TP-LINK|UN|N300-2):2.0\r\n",
 		.support_list =
 			"SupportList:\r\n"

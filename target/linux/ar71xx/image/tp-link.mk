@@ -237,6 +237,13 @@ define Device/cpe210-220-v1
   TPLINK_BOARD_ID := CPE210
 endef
 
+define Device/cpe220-v2
+  $(Device/cpe510-520-v1)
+  DEVICE_TITLE := TP-LINK CPE220 v2
+  BOARDNAME := CPE220-V2
+  TPLINK_BOARD_ID := CPE220-V2
+endef
+
 define Device/wbs210-v1
   $(Device/cpe510-520-v1)
   DEVICE_TITLE := TP-LINK WBS210 v1

@@ -542,6 +542,7 @@ platform_check_image() {
 		return $?
 		;;
 	cpe210|\
+	cpe220-v2|\
 	cpe510|\
 	eap120|\
 	wbs210|\

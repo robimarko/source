@@ -257,7 +257,7 @@ define Device/wbs510-v1
   BOARDNAME := WBS510
   TPLINK_BOARD_ID := WBS510
 endef
-TARGET_DEVICES += cpe210-220-v1 cpe510-520-v1 wbs210-v1 wbs510-v1
+TARGET_DEVICES += cpe210-220-v1 cpe220-v2 cpe510-520-v1 wbs210-v1 wbs510-v1
 
 define Device/eap120-v1
   DEVICE_TITLE := TP-LINK EAP120 v1

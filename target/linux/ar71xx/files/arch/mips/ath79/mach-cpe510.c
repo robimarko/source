@@ -1,5 +1,5 @@
 /*
- *  TP-LINK CPE210/220/510/520 board support
+ *  TP-LINK CPE210/220/220 v2/510/520 board support
  *
  *  Copyright (C) 2014 Matthias Schiffer <mschiffer@universe-factory.net>
  *

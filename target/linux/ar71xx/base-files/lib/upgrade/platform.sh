@@ -222,6 +222,7 @@ platform_check_image() {
 	cf-e380ac-v2|\
 	cf-e520n|\
 	cf-e530n|\
+	cpe220-v2|\
 	cpe505n|\
 	cpe830|\
 	cpe870|\
@@ -542,7 +543,6 @@ platform_check_image() {
 		return $?
 		;;
 	cpe210|\
-	cpe220-v2|\
 	cpe510|\
 	eap120|\
 	wbs210|\

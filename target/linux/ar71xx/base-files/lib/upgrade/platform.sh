@@ -223,7 +223,6 @@ platform_check_image() {
 	cf-e380ac-v2|\
 	cf-e520n|\
 	cf-e530n|\
-	cpe220-v2|\
 	cpe505n|\
 	cpe830|\
 	cpe870|\

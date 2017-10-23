@@ -94,9 +94,10 @@ tplink_get_image_boot_size() {
 }
 
 tplink_pharos_check_image() {
-	local magic_long="$(get_magic_long "$1")"
-	[ "$magic_long" != "7f454c46" ] && {
-		echo "Invalid image magic '$magic_long'"
+	local image_magic="$(get_magic_long "$1")"
+	local board_magic="$2"
+	[ "$image_magic" != "$board_magic" ] && {
+		echo "Invalid image magic '$image_magic'. Expected '$board_magic'."
 		return 1
 	}
 
@@ -550,7 +551,13 @@ platform_check_image() {
 	eap120|\
 	wbs210|\
 	wbs510)
-		tplink_pharos_check_image "$1" && return 0
+		# magic = .ELF
+		tplink_pharos_check_image "$1" "7f454c46" && return 0
+		return 1
+		;;
+	cpe210v2)
+		# magic = mktplinkfw v1 header
+		tplink_pharos_check_image "$1" "01000000" && return 0
 		return 1
 		;;
 	a40|\

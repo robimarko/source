@@ -349,11 +349,11 @@ tplink_pharos_get_model_string() {
 
 	# The returned string will end with \r\n, but we don't remove it here
 	# to simplify matching against it in the sysupgrade image check
-	dd if=$part bs=1 skip=4360 2>/dev/null | head -n 1
+	dd if=$part bs=1 skip=4360 count=64 2>/dev/null | tr -d '\r\0' | head -n 1
 }
 
 tplink_pharos_board_detect() {
-	local model_string="$(tplink_pharos_get_model_string | tr -d '\r')"
+	local model_string="$(tplink_pharos_get_model_string)"
 	local oIFS="$IFS"; IFS=":"; set -- $model_string; IFS="$oIFS"
 
 	local model="${1%%\(*}"
@@ -527,6 +527,10 @@ ar71xx_board_detect() {
 		;;
 	*"CPE210/220")
 		name="cpe210"
+		tplink_pharos_board_detect
+		;;
+	*"CPE210 v2")
+		name="cpe210v2"
 		tplink_pharos_board_detect
 		;;
 	*"CPE505N")

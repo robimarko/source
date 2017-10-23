@@ -237,6 +237,22 @@ define Device/cpe210-220-v1
   TPLINK_BOARD_ID := CPE210
 endef
 
+define Device/cpe210v2
+  DEVICE_TITLE := TP-LINK CPE210 v2
+  DEVICE_PACKAGES := rssileds
+  MTDPARTS := spi0.0:128k(u-boot)ro,64k(pation-table)ro,64k(product-info)ro,1536k(kernel),6144k(rootfs),192k(config)ro,64k(ART)ro,7680k@0x40000(firmware)
+  IMAGE_SIZE := 7680k
+  BOARDNAME := CPE210V2
+  TPLINK_BOARD_ID := CPE210V2
+  KERNEL := kernel-bin | patch-cmdline | lzma | tplink-v1-header
+  IMAGES := sysupgrade.bin factory.bin
+  IMAGE/sysupgrade.bin := append-rootfs | tplink-safeloader sysupgrade
+  IMAGE/factory.bin := append-rootfs | tplink-safeloader factory
+  TPLINK_HWID := 0x0
+  TPLINK_HWREV := 0
+  TPLINK_HEADER_VERSION := 1
+endef
+
 define Device/wbs210-v1
   $(Device/cpe510-520-v1)
   DEVICE_TITLE := TP-LINK WBS210 v1
@@ -250,7 +266,7 @@ define Device/wbs510-v1
   BOARDNAME := WBS510
   TPLINK_BOARD_ID := WBS510
 endef
-TARGET_DEVICES += cpe210-220-v1 cpe510-520-v1 wbs210-v1 wbs510-v1
+TARGET_DEVICES += cpe210-220-v1 cpe210v2 cpe510-520-v1 wbs210-v1 wbs510-v1
 
 define Device/eap120-v1
   DEVICE_TITLE := TP-LINK EAP120 v1

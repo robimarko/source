@@ -1,0 +1,58 @@
+From 5e037a5aee01a4cec6e0dbdfdc73ded21a7a3e85 Mon Sep 17 00:00:00 2001
+From: Robert Marko <robimarko@gmail.com>
+Date: Mon, 23 Oct 2017 20:16:56 +0200
+Subject: [PATCH] CPE210 v2 reference clock bypass
+
+---
+ arch/mips/ath79/clock.c    | 6 +++++-
+ arch/mips/ath79/dev-wmac.c | 6 +++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/ath79/clock.c b/arch/mips/ath79/clock.c
+index 4f928ae8..d6ab627c 100644
+--- a/arch/mips/ath79/clock.c
++++ b/arch/mips/ath79/clock.c
+@@ -25,6 +25,8 @@
+ #include <asm/mach-ath79/ar71xx_regs.h>
+ #include "common.h"
+ 
++#include <asm/prom.h>
++
+ #define AR71XX_BASE_FREQ	40000000
+ #define AR724X_BASE_FREQ	5000000
+ #define AR913X_BASE_FREQ	5000000
+@@ -365,7 +367,9 @@ static void __init qca953x_clocks_init(void)
+ 	u32 bootstrap;
+ 
+ 	bootstrap = ath79_reset_rr(QCA953X_RESET_REG_BOOTSTRAP);
+-	if (bootstrap &	QCA953X_BOOTSTRAP_REF_CLK_40)
++	if (strcmp (mips_get_machine_name(), "TP-LINK CPE210 v2"))
++		ref_rate = 25 * 1000 * 1000;
++	else if (bootstrap &	QCA953X_BOOTSTRAP_REF_CLK_40)
+ 		ref_rate = 40 * 1000 * 1000;
+ 	else
+ 		ref_rate = 25 * 1000 * 1000;
+diff --git a/arch/mips/ath79/dev-wmac.c b/arch/mips/ath79/dev-wmac.c
+index 7b8a44f9..e719d3fc 100644
+--- a/arch/mips/ath79/dev-wmac.c
++++ b/arch/mips/ath79/dev-wmac.c
+@@ -25,6 +25,8 @@
+ #include "common.h"
+ #include "dev-wmac.h"
+ 
++#include <asm/prom.h>
++
+ static u8 ath79_wmac_mac[ETH_ALEN];
+ 
+ static struct ath9k_platform_data ath79_wmac_data = {
+@@ -162,7 +164,9 @@ static void qca953x_wmac_setup(void)
+ 	ath79_wmac_resources[1].end = ATH79_IP2_IRQ(1);
+ 
+ 	t = ath79_reset_rr(QCA953X_RESET_REG_BOOTSTRAP);
+-	if (t & QCA953X_BOOTSTRAP_REF_CLK_40)
++	if (strcmp (mips_get_machine_name(), "TP-LINK CPE210 v2"))
++		ath79_wmac_data.is_clk_25mhz = true;
++	else if (t & QCA953X_BOOTSTRAP_REF_CLK_40)
+ 		ath79_wmac_data.is_clk_25mhz = false;
+ 	else
+ 		ath79_wmac_data.is_clk_25mhz = true;

@@ -424,6 +424,11 @@ hornet-ub-x2)
 	ucidef_set_led_wlan "wlan" "WLAN" "alfa:blue:wlan" "phy0tpt"
 	ucidef_set_led_usbdev "usb" "USB" "alfa:blue:usb" "1-1"
 	;;
+jwap603)
+        ucidef_set_led_netdev "lan" "LAN" "jj934x:green:led1" "eth0"
+	ucidef_set_led_wlan "wlan0" "WLAN0" "jj934x:green:led2" "phy0tpt"
+	ucidef_set_led_wlan "wlan1" "WLAN1" "jj934x:green:led3" "phy1tpt"
+	;;
 mc-mac1200r)
 	ucidef_set_led_wlan "wlan2g" "WLAN2G" "mercury:green:wlan2g" "phy1tpt"
 	ucidef_set_led_wlan "wlan5g" "WLAN5G" "mercury:green:wlan5g" "phy0tpt"

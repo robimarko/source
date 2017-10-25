@@ -568,6 +568,14 @@ define Device/jwap230
 endef
 TARGET_DEVICES += jwap230
 
+define Device/jwap603
+  DEVICE_TITLE := jjPlus JWAP603
+  BOARDNAME := JWAP603
+  IMAGE_SIZE := 15488k
+  MTDPARTS := spi0.0:256k(u-boot)ro,64k(u-boot-env),15488k(firmware),64k(art)ro
+endef
+TARGET_DEVICES += jwap603
+
 define Device/r602n
   DEVICE_TITLE := P&W R602N
   DEVICE_PACKAGES := kmod-usb-core kmod-usb2

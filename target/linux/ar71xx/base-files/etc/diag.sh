@@ -221,6 +221,9 @@ get_status_led() {
 	jwap230)
 		status_led="$board:green:led1"
 		;;
+	jwap603)
+	        status_led="jjplus:green:status"
+		;;
 	ls-sr71)
 		status_led="ubnt:green:d22"
 		;;

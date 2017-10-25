@@ -32,49 +32,186 @@
 #include "dev-wmac.h"
 #include "machtypes.h"
 
-#define JJ_AR934X_GPIO_11		11
-#define JJ_AR934X_GPIO_12 	        12
-#define JJ_AR934X_GPIO_13 	        13
-#define JJ_AR934X_GPIO_14		14
-#define JJ_AR934X_GPIO_15		15
-#define JJ_AR934X_GPIO_16		16
+#define JJPLUS_LED_GPIO11		11
+#define JJPLUS_LED_GPIO12		12
+#define JJPLUS_LED_GPIO13		13
+#define JJPLUS_LED_GPIO14		14
+#define JJPLUS_LED_GPIO16		16
 
-#define JJPLUS_KEYS_POLL_INTERVAL	20	/* msecs */
+#define JJPLUS_BTN_GPIO15 		15
+
+#define JJPLUS_KEYS_POLL_INTERVAL		20	/* msecs */
 #define JJPLUS_KEYS_DEBOUNCE_INTERVAL	(3 * JJPLUS_KEYS_POLL_INTERVAL)
 
-#define JJPLUS_MAC0_OFFSET		0x0
-#define JJPLUS_MAC1_OFFSET		0x6
-#define JJPLUS_WMAC_CALDATA_OFFSET	0x1000
-#define JJPLUS_PCIE_CALDATA_OFFSET	0x5000
+#define JJPLUS_MAC0_OFFSET				0
+#define JJPLUS_MAC1_OFFSET				6
+#define JJPLUS_WMAC_CALDATA_OFFSET		0x1000
+#define JJPLUS_WMAC_MAC_OFFSET			0x1002
+#define ONBOARD_PCIE_CALDATA_OFFSET 	0x5000
+#define ONBOARD_PCIE_MAC_OFFSET 		0x5002
 
-static struct gpio_led jj934x_leds_gpio[] __initdata = {
+
+static struct gpio_led jwap603_leds_gpio[] __initdata = {
 	{
-		.name		= "jj934x:green:led1",
-		.gpio		= JJ_AR934X_GPIO_11,
+		.name		= "jjplus:green:status",
+		.gpio		= JJPLUS_LED_GPIO11,
 		.active_low	= 1,
-	},
-	{
-		.name		= "jj934x:green:led2",
-		.gpio		= JJ_AR934X_GPIO_13,
+	},{
+		.name		= "jwap603:green:lan",
+		.gpio		= JJPLUS_LED_GPIO13,
 		.active_low	= 1,
-	},
-	{
-		.name		= "jj934x:green:led3",
-		.gpio		= JJ_AR934X_GPIO_14,
+	},{
+		.name		= "jwap603:green:wlan",
+		.gpio		= JJPLUS_LED_GPIO14,
 		.active_low	= 1,
 	}
 };
 
-static struct gpio_keys_button jj934x_gpio_keys[] __initdata = {
+static struct gpio_keys_button jwap603_gpio_keys[] __initdata = {
 	{
 		.desc		= "reset",
 		.type		= EV_KEY,
 		.code		= KEY_RESTART,
 		.debounce_interval = JJPLUS_KEYS_DEBOUNCE_INTERVAL,
-		.gpio		= JJ_AR934X_GPIO_15,
+		.gpio		= JJPLUS_BTN_GPIO15,
 		.active_low	= 1,
-	},
+	}
 };
+
+
+static struct gpio_led jwap604_leds_gpio[] __initdata = {
+	{
+		.name       = "jjplus:green:status",
+		.gpio       = JJPLUS_LED_GPIO11,
+		.active_low = 1,
+	},{
+		.name       = "jwap604:green:wlan1",
+		.gpio       = JJPLUS_LED_GPIO13,
+		.active_low = 1,
+	},{
+		.name       = "jwap604:green:wlan2",
+		.gpio       = JJPLUS_LED_GPIO14,
+		.active_low = 1,
+	}
+};
+
+static struct gpio_keys_button jwap604_gpio_keys[] __initdata = {
+	{
+		.desc       = "reset",
+		.type       = EV_KEY,
+		.code       = KEY_RESTART,
+		.debounce_interval = JJPLUS_KEYS_DEBOUNCE_INTERVAL,
+		.gpio       = JJPLUS_BTN_GPIO15,
+		.active_low = 1,
+	}
+};
+
+
+static struct gpio_led jwap702_leds_gpio[] __initdata = {
+	{
+		.name       = "jwap702:green:wlan2g",
+		.gpio       = JJPLUS_LED_GPIO11,
+		.active_low = 1,
+	},{
+		.name       = "jjplus:green:status",
+		.gpio       = JJPLUS_LED_GPIO12,
+		.active_low = 1,
+	},{
+		.name       = "jwap702:green:lan",
+		.gpio       = JJPLUS_LED_GPIO13,
+		.active_low = 1,
+	},{
+		.name       = "jwap702:green:wlan5g",
+		.gpio       = JJPLUS_LED_GPIO14,
+		.active_low = 1,
+	},{
+		.name       = "jwap702:green:wps",
+		.gpio       = JJPLUS_LED_GPIO16,
+		.active_low = 1,
+	}
+};
+
+static struct gpio_keys_button jwap702_gpio_keys[] __initdata = {
+    {
+		.desc       = "reset",
+		.type       = EV_KEY,
+		.code       = KEY_RESTART,
+		.debounce_interval = JJPLUS_KEYS_DEBOUNCE_INTERVAL,
+		.gpio       = JJPLUS_BTN_GPIO15,
+		.active_low = 1,
+    }
+};
+
+
+static void __init jj934x_common_setup(u8 *artPtr)
+{
+	ath79_register_m25p80(NULL);
+	ath79_register_wmac((artPtr + JJPLUS_WMAC_CALDATA_OFFSET), 
+						(artPtr + JJPLUS_WMAC_MAC_OFFSET));
+	ath79_wmac_disable_5ghz();
+}
+
+static void __init jwap603_setup(void)
+{
+	u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
+
+	jj934x_common_setup(art);
+
+	ath79_register_leds_gpio(-1, ARRAY_SIZE(jwap603_leds_gpio), jwap603_leds_gpio);
+	ath79_register_gpio_keys_polled(-1, JJPLUS_KEYS_POLL_INTERVAL,
+						ARRAY_SIZE(jwap603_gpio_keys), jwap603_gpio_keys);
+
+	ap91_pci_init((art + ONBOARD_PCIE_CALDATA_OFFSET),
+					(art + ONBOARD_PCIE_MAC_OFFSET));
+	ap9x_wmac0_disable_2ghz();
+
+	ath79_setup_ar934x_eth_cfg(AR934X_ETH_CFG_RGMII_GMAC0 | 0x14000);
+
+    ath79_register_mdio(0, 0x0);
+	ath79_init_mac(ath79_eth0_data.mac_addr, (art + JJPLUS_MAC0_OFFSET), 0);
+
+	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
+	ath79_eth0_data.phy_mask = BIT(0);
+	ath79_eth0_data.speed = SPEED_1000;
+	ath79_eth0_data.duplex = DUPLEX_FULL;
+
+	if (ath79_soc != ATH79_SOC_AR9344)
+		ath79_eth0_pll_data.pll_1000 = 0x06000000;
+	else
+		ath79_eth0_pll_data.pll_1000 = 0x0e000000;
+
+	ath79_register_eth(0);
+}
+MIPS_MACHINE(ATH79_MACH_JWAP603, "JWAP603", "jjPlus JWAP603/606 board", jwap603_setup);
+
+
+static void __init jwap702_setup(void)
+{
+	u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
+
+	ath79_register_m25p80(NULL);
+	ath79_register_wmac((art + JJPLUS_WMAC_CALDATA_OFFSET),
+							(art + JJPLUS_WMAC_MAC_OFFSET));
+
+	ath79_register_leds_gpio(-1, ARRAY_SIZE(jwap702_leds_gpio), jwap702_leds_gpio);
+	ath79_register_gpio_keys_polled(-1, JJPLUS_KEYS_POLL_INTERVAL,
+						ARRAY_SIZE(jwap702_gpio_keys), jwap702_gpio_keys);
+
+	ath79_setup_ar934x_eth_cfg(AR934X_ETH_CFG_RGMII_GMAC0 | 0x14000);
+
+	ath79_register_mdio(0, 0x0);
+	ath79_init_mac(ath79_eth0_data.mac_addr, (art + JJPLUS_MAC0_OFFSET), 0);
+
+	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
+	ath79_eth0_data.phy_mask = BIT(0);
+	ath79_eth0_data.speed = SPEED_1000;
+	ath79_eth0_data.duplex = DUPLEX_FULL;
+	ath79_eth0_pll_data.pll_1000 = 0x06000000;
+
+	ath79_register_eth(0);
+}
+MIPS_MACHINE(ATH79_MACH_JWAP702, "JWAP702", "jjPlus JWAP702 board", jwap702_setup);
+
 
 static struct ar8327_pad_cfg jwap604_ar8327_pad0_cfg = {
 	.mode = AR8327_PAD_MAC_RGMII,
@@ -103,36 +240,30 @@ static struct mdio_board_info jwap604_mdio0_info[] = {
 	}
 };
 
-
-static void jj934x_common_setup(void)
-{
-    u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
-
-    ath79_register_m25p80(NULL);
-
-    ath79_register_leds_gpio(-1, ARRAY_SIZE(jj934x_leds_gpio),
-                 jj934x_leds_gpio);
-    ath79_register_gpio_keys_polled(-1, JJPLUS_KEYS_POLL_INTERVAL,
-                    ARRAY_SIZE(jj934x_gpio_keys),
-                    jj934x_gpio_keys);
-    ath79_register_usb();
-    ath79_register_wmac(art + JJPLUS_WMAC_CALDATA_OFFSET, NULL);
-
-	ath79_register_mdio(0, 0x0);
-	ath79_init_mac(ath79_eth0_data.mac_addr, art + JJPLUS_MAC0_OFFSET, 0);
-}
-
 static void __init jwap604_setup(void)
 {
-    jj934x_common_setup();
+	u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
 
-	ap91_pci_init_simple();
+	jj934x_common_setup(art);
+
+	ath79_register_leds_gpio(-1, ARRAY_SIZE(jwap604_leds_gpio), jwap604_leds_gpio);
+	ath79_register_gpio_keys_polled(-1, JJPLUS_KEYS_POLL_INTERVAL,
+					ARRAY_SIZE(jwap604_gpio_keys), jwap604_gpio_keys);
+
+	ath79_register_usb();
+
+	ap91_pci_init((art + ONBOARD_PCIE_CALDATA_OFFSET),
+                  (art + ONBOARD_PCIE_MAC_OFFSET));
+	ap9x_wmac0_disable_2ghz();
 
 	ath79_setup_ar934x_eth_cfg(AR934X_ETH_CFG_RGMII_GMAC0 |
-				   AR934X_ETH_CFG_SW_ONLY_MODE);
+									AR934X_ETH_CFG_SW_ONLY_MODE);
+
+	ath79_register_mdio(0, 0x0);
+	ath79_init_mac(ath79_eth0_data.mac_addr, (art + JJPLUS_MAC0_OFFSET), 0);
 
 	mdiobus_register_board_info(jwap604_mdio0_info,
-				    ARRAY_SIZE(jwap604_mdio0_info));
+							ARRAY_SIZE(jwap604_mdio0_info));
 
 	/* GMAC0 is connected to an AR8327 switch */
 	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
@@ -142,148 +273,4 @@ static void __init jwap604_setup(void)
 	ath79_register_eth(0);
 }
 
-MIPS_MACHINE(ATH79_MACH_JWAP604, "JWAP604", "jjPlus JWAP604 board",
-	     jwap604_setup);
-
-
-#define AR934X_GMAC_REG_MAC_CFG1    0x0
-#define AR934X_GMAC_REG_MAC_CFG2    0x4
-#define AR934X_GMAC_REG_MII_CFG2    0x20
-#define AR934X_GMAC_REG_ETH_FIFO    0x48
-#define AR934X_GMAC_REG_ETH_CFG1    0x4c
-#define AR934X_GMAC_REG_ETH_CFG2    0x50
-#define AR934X_GMAC_REG_ETH_CFG3    0x54
-#define AR934X_GMAC_REG_ETH_CFG4    0x58
-#define AR934X_GMAC_REG_ETH_CFG5    0x5c
-
-#define AR934X_GE0_BASE     0x19000000
-#define AR934X_GE0_SIZE     0x10000
-
-static void __init ar8035_gphy_setup(void)
-{
-    void __iomem *base;
-    u32 t;
-
-    base = ioremap(AR934X_GE0_BASE, AR934X_GE0_SIZE);
-
-    t = __raw_readl(base + AR934X_GMAC_REG_MAC_CFG1);
-    t |= 0x30;
-    __raw_writel(t, base + AR934X_GMAC_REG_MAC_CFG1);
-
-    t = 0x7215;
-    __raw_writel(t, base + AR934X_GMAC_REG_MAC_CFG2);
-
-    t = 0x80000006;
-    __raw_writel(t, base + AR934X_GMAC_REG_MII_CFG2);
-    t = 0x6;
-    __raw_writel(t, base + AR934X_GMAC_REG_MII_CFG2);
-
-    t = 0x015500aa;
-    __raw_writel(t, base + AR934X_GMAC_REG_ETH_CFG2);
-
-    t = 0x66bc2;
-    __raw_writel(t, base + AR934X_GMAC_REG_ETH_CFG5);
-
-    iounmap(base);
-}
-
-static void __init jwap603_setup(void)
-{
-    jj934x_common_setup();
-
-    ap91_pci_init_simple();
-
-    ath79_setup_ar934x_eth_cfg(AR934X_ETH_CFG_RGMII_GMAC0 | 0x14000);
-    ar8035_gphy_setup();
-
-    /* GMAC0 is connected to an AR8035 PHY */
-    ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
-    ath79_eth0_data.phy_mask = BIT(0);
-    ath79_eth0_data.speed = SPEED_1000;
-    ath79_eth0_data.duplex = DUPLEX_FULL;
-    if (ath79_soc != ATH79_SOC_AR9344)
-        ath79_eth0_pll_data.pll_1000 = 0x06000000;
-    else
-        ath79_eth0_pll_data.pll_1000 = 0x0e000000;
-
-    ath79_register_eth(0);
-}
-
-MIPS_MACHINE(ATH79_MACH_JWAP603, "JWAP603", "jjPlus JWAP603/606 board",
-         jwap603_setup);
-
-
-static struct gpio_led jwap702_leds_gpio[] __initdata = {
-    {
-        .name       = "jwap702:green:led1",
-        .gpio       = JJ_AR934X_GPIO_11,
-        .active_low = 1,
-    },
-    {
-        .name       = "jwap702:green:reserve1",
-        .gpio       = JJ_AR934X_GPIO_12,
-        .active_low = 1,
-    },
-    {
-        .name       = "jwap702:green:led2",
-        .gpio       = JJ_AR934X_GPIO_13,
-        .active_low = 1,
-    },
-    {
-        .name       = "jwap702:green:led3",
-        .gpio       = JJ_AR934X_GPIO_14,
-        .active_low = 1,
-    },
-    {
-        .name       = "jwap702:green:reserve2",
-        .gpio       = JJ_AR934X_GPIO_16,
-        .active_low = 1,
-    }
-};
-
-static struct gpio_keys_button jwap702_gpio_keys[] __initdata = {
-    {
-        .desc       = "reset",
-        .type       = EV_KEY,
-        .code       = KEY_RESTART,
-        .debounce_interval = JJPLUS_KEYS_DEBOUNCE_INTERVAL,
-        .gpio       = JJ_AR934X_GPIO_15,
-        .active_low = 1,
-    },
-};
-
-static void __init jwap702_setup(void)
-{
-    u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
-
-    ath79_register_m25p80(NULL);
-
-    ath79_register_leds_gpio(-1, ARRAY_SIZE(jwap702_leds_gpio),
-		                 jwap702_leds_gpio);
-    ath79_register_gpio_keys_polled(-1, JJPLUS_KEYS_POLL_INTERVAL,
-		                    ARRAY_SIZE(jwap702_gpio_keys),
-						                    jwap702_gpio_keys);
-    ath79_register_usb();
-    ath79_register_wmac(art + JJPLUS_WMAC_CALDATA_OFFSET, NULL);
-
-    ath79_register_mdio(0, 0x0);
-    ath79_init_mac(ath79_eth0_data.mac_addr, art + JJPLUS_MAC0_OFFSET, 0);
-
-    ath79_setup_ar934x_eth_cfg(AR934X_ETH_CFG_RGMII_GMAC0 | 0x14000);
-    ar8035_gphy_setup();
-
-    /* GMAC0 is connected to an AR8035 PHY */
-    ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
-    ath79_eth0_data.phy_mask = BIT(0);
-    ath79_eth0_data.speed = SPEED_1000;
-    ath79_eth0_data.duplex = DUPLEX_FULL;
-    if (ath79_soc != ATH79_SOC_AR9344)
-        ath79_eth0_pll_data.pll_1000 = 0x06000000;
-    else
-        ath79_eth0_pll_data.pll_1000 = 0x0e000000;
-
-    ath79_register_eth(0);
-}
-
-MIPS_MACHINE(ATH79_MACH_JWAP702, "JWAP702", "jjPlus JWAP702/212 board",
-         jwap702_setup);
+MIPS_MACHINE(ATH79_MACH_JWAP604, "JWAP604", "jjPlus JWAP604 board", jwap604_setup);

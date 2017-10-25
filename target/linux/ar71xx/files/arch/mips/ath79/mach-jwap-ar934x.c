@@ -33,8 +33,8 @@
 #include "machtypes.h"
 
 #define JJ_AR934X_GPIO_11		11
-#define JJ_AR934X_GPIO_12 	12
-#define JJ_AR934X_GPIO_13 	13
+#define JJ_AR934X_GPIO_12 	        12
+#define JJ_AR934X_GPIO_13 	        13
 #define JJ_AR934X_GPIO_14		14
 #define JJ_AR934X_GPIO_15		15
 #define JJ_AR934X_GPIO_16		16

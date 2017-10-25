@@ -707,7 +707,6 @@ ar71xx_board_detect() {
 		;;
 	*"JWAP603/606 board")
 		name="jwap603"
-		export FIRMWARE="pci_wmac0.eeprom"
 		;;
 	*"Lima"*)
 		name="lima"

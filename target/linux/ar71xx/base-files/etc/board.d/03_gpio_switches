@@ -17,7 +17,6 @@ nanostation-m-xw)
 	ucidef_add_gpio_switch "poe_passthrough" "PoE Passthrough" "2"
 	;;
 cpe210|\
-cpe220-v2|\
 cpe510|\
 wbs210|\
 wbs510)

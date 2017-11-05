@@ -73,29 +73,8 @@ static struct gpio_keys_button cpe210_v2_gpio_keys[] __initdata = {
 
 static void __init cpe210_v2_setup(void)
 {
-	void __iomem *reg;
-
 	u8 *mac = (u8 *) KSEG1ADDR(0x1f830008);
 	u8 *ee = (u8 *) KSEG1ADDR(0x1fff1000);
-
-	ath79_gpio_direction_select(8, 0);
-	ath79_gpio_direction_select(9, 0);
-
-	ath79_gpio_direction_select(10, 1); /* SOUT */
-	ath79_gpio_direction_select(5, 1);
-	ath79_gpio_direction_select(6, 1);
-	ath79_gpio_direction_select(7, 1);
-
-	ath79_gpio_output_select(10, 0x16); /* SOUT */
-	ath79_gpio_output_select(5, 0x09); /* CS0 */
-	ath79_gpio_output_select(6, 0x08); /* CLK */
-	ath79_gpio_output_select(7, 0x0c); /* MOSI */
-
-	reg = (void *)KSEG1ADDR(AR71XX_GPIO_BASE + QCA953X_GPIO_REG_IN_ENABLE0);
-	/* set in register */
-        __raw_writel(0x908, reg); /* pin 8 + pin 9 = SIN + MISO */
-        /* flush write */
-        __raw_readl(reg);
 	
 	ath79_register_leds_gpio(-1, ARRAY_SIZE(cpe210_v2_leds_gpio),
 				 cpe210_v2_leds_gpio);

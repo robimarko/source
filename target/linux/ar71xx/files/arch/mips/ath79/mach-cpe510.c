@@ -2,6 +2,7 @@
  *  TP-LINK CPE210/210 v2/220/510/520 board support
  *
  *  Copyright (C) 2014 Matthias Schiffer <mschiffer@universe-factory.net>
+ *  Copyright (C) 2017 Robert Marko <robimarko@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU General Public License version 2 as published

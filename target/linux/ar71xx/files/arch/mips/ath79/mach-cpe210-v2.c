@@ -11,6 +11,7 @@
 #include <linux/gpio.h>
 #include <linux/platform_device.h>
 #include <linux/ar8216_platform.h>
+#include <linux/ath9k_platform.h>
 #include <asm/mach-ath79/ath79.h>
 #include <asm/mach-ath79/ar71xx_regs.h>
 

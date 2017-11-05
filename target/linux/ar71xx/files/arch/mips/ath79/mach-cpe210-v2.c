@@ -92,7 +92,7 @@ static void __init cpe210_v2_setup(void)
 	ath79_register_mdio(0, 0x0);
 	ath79_init_mac(ath79_eth0_data.mac_addr, mac, 0);
 	ath79_eth0_data.duplex = DUPLEX_FULL;
-	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
+	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_MII;
 	ath79_eth0_data.speed = SPEED_100;
 	ath79_eth0_data.phy_mask = BIT(4);
 	ath79_register_eth(0);

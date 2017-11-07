@@ -110,7 +110,9 @@ define Device/tl-wr840n-v5
   TPLINK_HVERSION := 3
   KERNEL := $(KERNEL_DTB)
   KERNEL_INITRAMFS := $(KERNEL_DTB) | tplink-v2-header -e
+  IMAGES += tftp-recovery.bin
   IMAGE/factory.bin := tplink-v2-image -e
+  IMAGE/tftp-recovery.bin := pad-extra 128k | $$(IMAGE/factory.bin)
   IMAGE/sysupgrade.bin := tplink-v2-image -s -e | append-metadata | \
 	check-size $$$$(IMAGE_SIZE)
 endef

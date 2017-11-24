@@ -216,7 +216,7 @@ static void __init cpe210_v2_setup(void)
 	
 	ath79_register_leds_gpio(-1, ARRAY_SIZE(cpe210_v2_leds_gpio),
 				 cpe210_v2_leds_gpio);
-	ath79_register_gpio_keys_polled(-1, CPE210_V2_KEYS_POLL_INTERVAL,
+	ath79_register_gpio_keys_polled(-1, CPE510_KEYS_POLL_INTERVAL,
 					ARRAY_SIZE(cpe210_v2_gpio_keys),
 					cpe210_v2_gpio_keys);
 	ath79_register_m25p80(NULL);

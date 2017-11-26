@@ -1,0 +1,14 @@
+--- a/net/mac80211/rx.c
++++ b/net/mac80211/rx.c
+@@ -626,9 +626,9 @@
+ 	if (ieee80211_hw_check(&local->hw, RX_INCLUDES_FCS)) {
+ 		if (unlikely(origskb->len <= FCS_LEN)) {
+ 			/* driver bug */
+-			WARN_ON(1);
++			WARN_ON(0);
+ 			dev_kfree_skb(origskb);
+-			return NULL;
++			return false;
+ 		}
+ 		present_fcs_len = FCS_LEN;
+ 	}

@@ -68,6 +68,7 @@ static void __init ubnt_litebeam_5ac_23__setup(void)
 
 	ath79_register_m25p80(NULL);
 	ath79_register_mdio(0, 0x0);
+	ath79_register_mdio(1, 0x4);
 	ath79_register_pci();
 
 	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;

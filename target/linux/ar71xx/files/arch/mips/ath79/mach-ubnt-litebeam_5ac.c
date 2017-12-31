@@ -28,7 +28,6 @@
 #include "dev-leds-gpio.h"
 #include "dev-m25p80.h"
 #include "dev-wmac.h"
-#include "dev-usb.h"
 #include "machtypes.h"
 
 /*

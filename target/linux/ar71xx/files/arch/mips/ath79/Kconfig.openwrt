@@ -1917,8 +1917,8 @@ config ATH79_MACH_UBNT
 	select ATH79_DEV_M25P80
 	select ATH79_DEV_USB
 
-config ATH79_MACH_UBNT_LITEBEAM_5AC
-	bool "Ubiquiti LiteBeam 5AC boards support"
+config ATH79_MACH_UBNT_LITEBEAM_5AC_23
+	bool "Ubiquiti LiteBeam 5AC-23 board support"
 	select SOC_AR934X
 	select ATH79_DEV_AP9X_PCI if PCI
 	select ATH79_DEV_ETH

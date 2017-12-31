@@ -55,7 +55,7 @@ static struct gpio_keys_button ubnt_unifiac_gpio_keys[] __initdata = {
 	}
 };
 */
-static void __init ubnt_litebeam_5ac_23__setup(void)
+static void __init ubnt_litebeam_5ac_23_setup(void)
 {
 	u8 *mac = (u8 *) KSEG1ADDR(0x1fff0000);
 
@@ -79,4 +79,4 @@ static void __init ubnt_litebeam_5ac_23__setup(void)
 	ath79_register_eth(0);
 }
 
-MIPS_MACHINE(ATH79_MACH_UBNT_LITEBEAM_5AC_23, "UBNT-LITEBEAM-5AC-23", "Ubiquiti LiteBeam 5AC-23", ubnt_litebeam_5ac_23__setup);
+MIPS_MACHINE(ATH79_MACH_UBNT_LITEBEAM_5AC_23, "UBNT-LITEBEAM-5AC-23", "Ubiquiti LiteBeam 5AC-23", ubnt_litebeam_5ac_23_setup);

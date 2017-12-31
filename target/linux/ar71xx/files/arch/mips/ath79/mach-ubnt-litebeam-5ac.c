@@ -68,6 +68,8 @@ static void __init ubnt_litebeam_5ac_23__setup(void)
 	ath79_register_mdio(0, 0x0);
 	ath79_register_pci();
 
+	ath79_setup_ar934x_eth_cfg(AR934X_ETH_CFG_RGMII_GMAC0);
+
 	/* AR8035 connected to PHY4 */
 	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
 	ath79_eth0_data.duplex = DUPLEX_FULL;

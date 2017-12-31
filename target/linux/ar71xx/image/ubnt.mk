@@ -163,7 +163,7 @@ define Device/ubnt-nano-m-xw
 endef
 TARGET_DEVICES += ubnt-nano-m-xw
 
-define Device/ubnt-litebeam-5ac
+define Device/ubnt-litebeam-5ac-23
   $(Device/ubnt-wa)
   DEVICE_TITLE := Ubiquiti LiteBeam 5AC-23
   BOARDNAME := UBNT-LITEBEAM-5AC-23
@@ -171,7 +171,7 @@ define Device/ubnt-litebeam-5ac
   MTDPARTS := spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,15744k(firmware),256k(cfg)ro,64k(EEPROM)ro
   DEVICE_PACKAGES += kmod-ath10k ath10k-firmware-qca988x
 endef
-TARGET_DEVICES += ubnt-litebeam-5ac
+TARGET_DEVICES += ubnt-litebeam-5ac-23
 
 define Device/ubnt-loco-m-xw
   $(Device/ubnt-xw)

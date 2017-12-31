@@ -61,14 +61,20 @@ static void __init ubnt_litebeam_5ac_23__setup(void)
 {
 	u8 *mac = (u8 *) KSEG1ADDR(0x1fff0000);
 
-  ath79_register_m25p80(NULL);
-  ath79_register_mdio(0, 0x0);
+	/* Disable JTAG, enabling GPIOs 0-3 */
+	/* Configure OBS4 line, for GPIO 4*/
+	ath79_gpio_function_setup(AR934X_GPIO_FUNC_JTAG_DISABLE,
+				  AR934X_GPIO_FUNC_CLK_OBS4_EN);
+
+	ath79_register_m25p80(NULL);
+	ath79_register_mdio(0, 0x0);
+	ath79_register_pci();
 
 	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
-  ath79_eth0_data.duplex = DUPLEX_FULL;
+	ath79_eth0_data.duplex = DUPLEX_FULL;
 	ath79_eth0_data.speed = SPEED_1000;
 	ath79_init_mac(ath79_eth0_data.mac_addr, mac, 0);
-  ath79_register_eth(0);
+	ath79_register_eth(0);
 }
 
 MIPS_MACHINE(ATH79_MACH_UBNT_LITEBEAM_5AC_23, "UBNT-LITEBEAM-5AC-23", "Ubiquiti LiteBeam 5AC-23", ubnt_litebeam_5ac_23__setup);

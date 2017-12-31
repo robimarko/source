@@ -29,7 +29,7 @@ define Build/mkubntimage-wa-split
 	dd if=$@ of=$@.old1 bs=1024k count=1; \
 	dd if=$@ of=$@.old2 bs=1024k skip=1; \
 	$(STAGING_DIR_HOST)/bin/mkfwimage \
-		-B $(UBNT_BOARD) -v $(UBNT_TYPE).$(UBNT_CHIP).v7.1.2-$(VERSION_DIST)-$(REVISION) \
+		-B $(UBNT_BOARD) -v $(UBNT_TYPE).$(UBNT_CHIP).v8.0.0-$(VERSION_DIST)-$(REVISION) \
 		-k $@.old1 \
 		-r $@.old2 \
 		-o $@; \

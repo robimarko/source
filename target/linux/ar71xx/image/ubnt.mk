@@ -66,6 +66,12 @@ define Device/ubnt-bz
   UBNT_CHIP := ar7240
 endef
 
+define Device/ubnt-wa
+  $(Device/ubnt)
+  UBNT_TYPE := WA
+  UBNT_CHIP := ar934x
+endef
+
 define Device/rw2458n
   $(Device/ubnt-xm)
   DEVICE_TITLE := Ubiquiti RW2458N
@@ -156,6 +162,16 @@ define Device/ubnt-nano-m-xw
   BOARDNAME := UBNT-NM-XW
 endef
 TARGET_DEVICES += ubnt-nano-m-xw
+
+define Device/ubnt-litebeam-5ac
+  $(Device/ubnt-wa)
+  DEVICE_TITLE := Ubiquiti LiteBeam 5AC-23
+  BOARDNAME := UBNT-LITEBEAM-5AC-23
+  IMAGE_SIZE := 15744k
+  MTDPARTS := spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,15744k(firmware),256k(cfg)ro,64k(EEPROM)ro
+  DEVICE_PACKAGES += kmod-ath10k ath10k-firmware-qca988x
+endef
+TARGET_DEVICES += ubnt-litebeam-5ac
 
 define Device/ubnt-loco-m-xw
   $(Device/ubnt-xw)

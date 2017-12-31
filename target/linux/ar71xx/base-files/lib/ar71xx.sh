@@ -1226,6 +1226,9 @@ ar71xx_board_detect() {
 	*"Tube2H")
 		name="tube2h"
 		;;
+	*"Ubiquiti LiteBeam 5AC-23")
+		name="ubnt-litebeam-5ac-23"
+		;;
 	*"UniFi")
 		name="unifi"
 		;;

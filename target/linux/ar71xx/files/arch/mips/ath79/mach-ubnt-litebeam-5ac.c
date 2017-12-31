@@ -13,13 +13,11 @@
 #include <linux/platform_device.h>
 #include <linux/ath9k_platform.h>
 #include <linux/etherdevice.h>
+#include <linux/ar8216_platform.h>
 
 #include <asm/mach-ath79/ath79.h>
 #include <asm/mach-ath79/irq.h>
 #include <asm/mach-ath79/ar71xx_regs.h>
-
-#include <linux/platform_data/phy-at803x.h>
-#include <linux/ar8216_platform.h>
 
 #include "common.h"
 #include "dev-ap9x-pci.h"
@@ -68,12 +66,13 @@ static void __init ubnt_litebeam_5ac_23__setup(void)
 
 	ath79_register_m25p80(NULL);
 	ath79_register_mdio(0, 0x0);
-	ath79_register_mdio(1, 0x4);
 	ath79_register_pci();
 
+	/* AR8035 connected to PHY4 */
 	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_RGMII;
 	ath79_eth0_data.duplex = DUPLEX_FULL;
 	ath79_eth0_data.speed = SPEED_1000;
+	ath79_eth0_data.phy_mask = BIT(4);
 	ath79_init_mac(ath79_eth0_data.mac_addr, mac, 0);
 	ath79_register_eth(0);
 }

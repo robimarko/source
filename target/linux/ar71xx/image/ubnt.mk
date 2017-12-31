@@ -24,6 +24,18 @@ define Build/mkubntimage-split
 	rm $@.old1 $@.old2 )
 endef
 
+define Build/mkubntimage-wa-split
+	-[ -f $@ ] && ( \
+	dd if=$@ of=$@.old1 bs=1024k count=1; \
+	dd if=$@ of=$@.old2 bs=1024k skip=1; \
+	$(STAGING_DIR_HOST)/bin/mkfwimage \
+		-B $(UBNT_BOARD) -v $(UBNT_TYPE).$(UBNT_CHIP).v9.9.9-$(VERSION_DIST)-$(REVISION) \
+		-k $@.old1 \
+		-r $@.old2 \
+		-o $@; \
+	rm $@.old1 $@.old2 )
+endef
+
 define Build/mkubntimage2
 	-$(STAGING_DIR_HOST)/bin/mkfwimage2 -f 0x9f000000 \
 		-v $(UBNT_TYPE).$(UBNT_CHIP).v6.0.0-$(VERSION_DIST)-$(REVISION) \
@@ -170,6 +182,9 @@ define Device/ubnt-litebeam-5ac-23
   IMAGE_SIZE := 15744k
   MTDPARTS := spi0.0:256k(u-boot)ro,64k(u-boot-env)ro,15744k(firmware),256k(cfg)ro,64k(EEPROM)ro
   DEVICE_PACKAGES += kmod-ath10k ath10k-firmware-qca988x
+  IMAGES := sysupgrade.bin factory.bin
+  IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
+  IMAGE/factory.bin := $$(IMAGE/sysupgrade.bin) | mkubntimage-wa-split
 endef
 TARGET_DEVICES += ubnt-litebeam-5ac-23
 

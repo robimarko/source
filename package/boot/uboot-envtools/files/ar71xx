@@ -46,6 +46,7 @@ om5p-acv2|\
 om5p-an|\
 sr3200|\
 tube2h|\
+ubnt-litebeam-5ac-23|\
 wndr3700|\
 xd3200)
 	ubootenv_add_uci_config "/dev/mtd1" "0x0" "0x10000" "0x10000"

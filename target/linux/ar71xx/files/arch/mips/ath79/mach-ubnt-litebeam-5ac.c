@@ -29,33 +29,23 @@
 #include "dev-wmac.h"
 #include "machtypes.h"
 
-/*
-#define LITEBEAM_5AC_KEYS_POLL_INTERVAL	20
+
+#define LITEBEAM_5AC_KEYS_POLL_INTERVAL		20
 #define LITEBEAM_5AC_KEYS_DEBOUNCE_INTERVAL	(3 * LITEBEAM_5AC_KEYS_POLL_INTERVAL)
 
-static struct gpio_led ubnt_unifiac_leds_gpio[] __initdata = {
-	{
-		.name		= "ubnt:white:dome",
-		.gpio		= UNIFIAC_GPIO_LED_WHITE,
-		.active_low	= 0,
-	}, {
-		.name		= "ubnt:blue:dome",
-		.gpio		= UNIFIAC_GPIO_LED_BLUE,
-		.active_low	= 0,
-	}
-};
+#define LITEBEAM_5AC_GPIO_BTN_RESET		12
 
-static struct gpio_keys_button ubnt_unifiac_gpio_keys[] __initdata = {
+static struct gpio_keys_button ubnt_litebeam_5ac_23_gpio_keys[] __initdata = {
 	{
 		.desc			= "reset",
 		.type			= EV_KEY,
 		.code			= KEY_RESTART,
-		.debounce_interval	= UNIFIAC_KEYS_DEBOUNCE_INTERVAL,
-		.gpio			= UNIFIAC_GPIO_BTN_RESET,
+		.debounce_interval	= LITEBEAM_5AC_KEYS_DEBOUNCE_INTERVAL,
+		.gpio			= LITEBEAM_5AC_GPIO_BTN_RESET,
 		.active_low		= 1,
 	}
 };
-*/
+
 static void __init ubnt_litebeam_5ac_23_setup(void)
 {
 	u8 *mac = (u8 *) KSEG1ADDR(0x1fff0000);
@@ -67,6 +57,10 @@ static void __init ubnt_litebeam_5ac_23_setup(void)
 
 	ath79_register_m25p80(NULL);
 	ath79_register_mdio(0, 0x0);
+
+	ath79_register_gpio_keys_polled(-1, LITEBEAM_5AC_KEYS_POLL_INTERVAL,
+	                                ARRAY_SIZE(ubnt_litebeam_5ac_23_gpio_keys),
+	                                ubnt_litebeam_5ac_23_gpio_keys);
 
 	ath79_setup_ar934x_eth_cfg(AR934X_ETH_CFG_RGMII_GMAC0);
 

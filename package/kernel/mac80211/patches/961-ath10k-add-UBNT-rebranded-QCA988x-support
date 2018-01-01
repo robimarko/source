@@ -1,0 +1,101 @@
+From f7961b57e5220f9d4f53247a8b6503102db3cbc2 Mon Sep 17 00:00:00 2001
+From: Robert Marko <robimarko@gmail.com>
+Date: Mon, 1 Jan 2018 20:16:55 +0100
+Subject: [PATCH] Add support for UBNT QCA988X
+
+Add support for UBNT rebranded QCA988X
+---
+ .../drivers/net/wireless/ath/ath10k/core.c         | 24 ++++++++++++++++++++++
+ .../drivers/net/wireless/ath/ath10k/hw.h           |  1 +
+ .../drivers/net/wireless/ath/ath10k/pci.c          | 10 +++++++++
+ 3 files changed, 35 insertions(+)
+
+diff --git a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/core.c b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/core.c
+index 5178792..f9a5ad5 100644
+--- a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/core.c
++++ b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/core.c
+@@ -76,6 +76,30 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
+ 		.vht160_mcs_tx_highest = 0,
+ 		.n_cipher_suites = 8,
+ 	},
++	{
++		.id = QCA988X_HW_2_0_VERSION,
++		.dev_id = UBNT_QCA988X_2_0_DEVICE_ID,
++		.name = "UBNT qca988x hw2.0",
++		.patch_load_addr = QCA988X_HW_2_0_PATCH_LOAD_ADDR,
++		.uart_pin = 7,
++		.cc_wraparound_type = ATH10K_HW_CC_WRAP_SHIFTED_ALL,
++		.otp_exe_param = 0,
++		.channel_counters_freq_hz = 88000,
++		.max_probe_resp_desc_thres = 0,
++		.cal_data_len = 2116,
++		.fw = {
++			.dir = QCA988X_HW_2_0_FW_DIR,
++			.board = QCA988X_HW_2_0_BOARD_DATA_FILE,
++			.board_size = QCA988X_BOARD_DATA_SZ,
++			.board_ext_size = QCA988X_BOARD_EXT_DATA_SZ,
++		},
++		.hw_ops = &qca988x_ops,
++		.decap_align_bytes = 4,
++		.spectral_bin_discard = 0,
++		.vht160_mcs_rx_highest = 0,
++		.vht160_mcs_tx_highest = 0,
++		.n_cipher_suites = 8,
++	},
+ 	{
+ 		.id = QCA9887_HW_1_0_VERSION,
+ 		.dev_id = QCA9887_1_0_DEVICE_ID,
+diff --git a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/hw.h b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/hw.h
+index 70782a5..de93516 100644
+--- a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/hw.h
++++ b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/hw.h
+@@ -23,6 +23,7 @@
+ #define ATH10K_FW_DIR			"ath10k"
+ 
+ #define QCA988X_2_0_DEVICE_ID   (0x003c)
++#define UBNT_QCA988X_2_0_DEVICE_ID   (0x11ac)
+ #define QCA6164_2_1_DEVICE_ID   (0x0041)
+ #define QCA6174_2_1_DEVICE_ID   (0x003e)
+ #define QCA99X0_2_0_DEVICE_ID   (0x0040)
+diff --git a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/pci.c b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/pci.c
+index 6e40498..bbf0d61 100644
+--- a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/pci.c
++++ b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/pci.c
+@@ -53,6 +53,7 @@ MODULE_PARM_DESC(reset_mode, "0: auto, 1: warm only (default: 0)");
+ 
+ static const struct pci_device_id ath10k_pci_id_table[] = {
+ 	{ PCI_VDEVICE(ATHEROS, QCA988X_2_0_DEVICE_ID) }, /* PCI-E QCA988X V2 */
++	{ PCI_VDEVICE(ATHEROS, UBNT_QCA988X_2_0_DEVICE_ID) }, /* PCI-E UBNT QCA988X V2 */
+ 	{ PCI_VDEVICE(ATHEROS, QCA6164_2_1_DEVICE_ID) }, /* PCI-E QCA6164 V2.1 */
+ 	{ PCI_VDEVICE(ATHEROS, QCA6174_2_1_DEVICE_ID) }, /* PCI-E QCA6174 V2.1 */
+ 	{ PCI_VDEVICE(ATHEROS, QCA99X0_2_0_DEVICE_ID) }, /* PCI-E QCA99X0 V2 */
+@@ -69,6 +70,7 @@ static const struct ath10k_pci_supp_chip ath10k_pci_supp_chips[] = {
+ 	 * because of that.
+ 	 */
+ 	{ QCA988X_2_0_DEVICE_ID, QCA988X_HW_2_0_CHIP_ID_REV },
++	{ UBNT_QCA988X_2_0_DEVICE_ID, QCA988X_HW_2_0_CHIP_ID_REV },
+ 
+ 	{ QCA6164_2_1_DEVICE_ID, QCA6174_HW_2_1_CHIP_ID_REV },
+ 	{ QCA6164_2_1_DEVICE_ID, QCA6174_HW_2_2_CHIP_ID_REV },
+@@ -1977,6 +1979,7 @@ static int ath10k_pci_get_num_banks(struct ath10k *ar)
+ 
+ 	switch (ar_pci->pdev->device) {
+ 	case QCA988X_2_0_DEVICE_ID:
++	case UBNT_QCA988X_2_0_DEVICE_ID:
+ 	case QCA99X0_2_0_DEVICE_ID:
+ 	case QCA9888_2_0_DEVICE_ID:
+ 	case QCA9984_1_0_DEVICE_ID:
+@@ -3215,6 +3218,13 @@ static int ath10k_pci_probe(struct pci_dev *pdev,
+ 		pci_hard_reset = ath10k_pci_qca988x_chip_reset;
+ 		targ_cpu_to_ce_addr = ath10k_pci_qca988x_targ_cpu_to_ce_addr;
+ 		break;
++	case UBNT_QCA988X_2_0_DEVICE_ID:
++		hw_rev = ATH10K_HW_QCA988X;
++		pci_ps = false;
++		pci_soft_reset = ath10k_pci_warm_reset;
++		pci_hard_reset = ath10k_pci_qca988x_chip_reset;
++		targ_cpu_to_ce_addr = ath10k_pci_qca988x_targ_cpu_to_ce_addr;
++		break;
+ 	case QCA9887_1_0_DEVICE_ID:
+ 		hw_rev = ATH10K_HW_QCA9887;
+ 		pci_ps = false;

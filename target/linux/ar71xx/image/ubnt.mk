@@ -175,7 +175,7 @@ define Device/ubnt-nano-m-xw
 endef
 TARGET_DEVICES += ubnt-nano-m-xw
 
-define Device/ubnt-litebeam-5ac-23
+define Device/litebeam-5ac-23
   $(Device/ubnt-wa)
   DEVICE_TITLE := Ubiquiti LiteBeam 5AC-23
   BOARDNAME := UBNT-LITEBEAM-5AC-23
@@ -186,7 +186,7 @@ define Device/ubnt-litebeam-5ac-23
   IMAGE/sysupgrade.bin := append-kernel | pad-to $$$$(BLOCKSIZE) | append-rootfs | pad-rootfs | check-size $$$$(IMAGE_SIZE)
   IMAGE/factory.bin := $$(IMAGE/sysupgrade.bin) | mkubntimage-wa-split
 endef
-TARGET_DEVICES += ubnt-litebeam-5ac-23
+TARGET_DEVICES += litebeam-5ac-23
 
 define Device/ubnt-loco-m-xw
   $(Device/ubnt-xw)

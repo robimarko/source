@@ -10,10 +10,10 @@ Add support for UBNT rebranded QCA988X
  .../drivers/net/wireless/ath/ath10k/pci.c          | 10 +++++++++
  3 files changed, 35 insertions(+)
 
-diff --git a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/core.c b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/core.c
+diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
 index 5178792..f9a5ad5 100644
---- a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/core.c
-+++ b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/core.c
+--- a/drivers/net/wireless/ath/ath10k/core.c
++++ b/drivers/net/wireless/ath/ath10k/core.c
 @@ -76,6 +76,30 @@ static const struct ath10k_hw_params ath10k_hw_params_list[] = {
  		.vht160_mcs_tx_highest = 0,
  		.n_cipher_suites = 8,
@@ -45,10 +45,10 @@ index 5178792..f9a5ad5 100644
  	{
  		.id = QCA9887_HW_1_0_VERSION,
  		.dev_id = QCA9887_1_0_DEVICE_ID,
-diff --git a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/hw.h b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/hw.h
+diff --git a/drivers/net/wireless/ath/ath10k/hw.h b/drivers/net/wireless/ath/ath10k/hw.h
 index 70782a5..de93516 100644
---- a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/hw.h
-+++ b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/hw.h
+--- a/drivers/net/wireless/ath/ath10k/hw.h
++++ b/drivers/net/wireless/ath/ath10k/hw.h
 @@ -23,6 +23,7 @@
  #define ATH10K_FW_DIR			"ath10k"
  
@@ -57,10 +57,10 @@ index 70782a5..de93516 100644
  #define QCA6164_2_1_DEVICE_ID   (0x0041)
  #define QCA6174_2_1_DEVICE_ID   (0x003e)
  #define QCA99X0_2_0_DEVICE_ID   (0x0040)
-diff --git a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/pci.c b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/pci.c
+diff --git a/drivers/net/wireless/ath/ath10k/pci.c b/drivers/net/wireless/ath/ath10k/pci.c
 index 6e40498..bbf0d61 100644
---- a/backports-2017-11-01/drivers/net/wireless/ath/ath10k/pci.c
-+++ b/backports-2017-11-01/drivers/net/wireless/ath/ath10k/pci.c
+--- a/drivers/net/wireless/ath/ath10k/pci.c
++++ b/drivers/net/wireless/ath/ath10k/pci.c
 @@ -53,6 +53,7 @@ MODULE_PARM_DESC(reset_mode, "0: auto, 1: warm only (default: 0)");
  
  static const struct pci_device_id ath10k_pci_id_table[] = {

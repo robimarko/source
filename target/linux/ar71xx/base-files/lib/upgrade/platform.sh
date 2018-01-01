@@ -249,6 +249,7 @@ platform_check_image() {
 	hornet-ub-x2|\
 	jwap230|\
 	lima|\
+	litebeam-5ac-23|\
 	loco-m-xw|\
 	mzk-w04nu|\
 	mzk-w300nh|\
@@ -271,7 +272,6 @@ platform_check_image() {
 	tew-823dru|\
 	tl-wr1043n-v5|\
 	tl-wr942n-v1|\
-	litebeam-5ac-23|\
 	unifi|\
 	unifi-outdoor|\
 	unifiac-lite|\
